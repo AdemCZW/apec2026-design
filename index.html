@@ -555,18 +555,25 @@
     c.lineTo(s/2+dx,s/2-dy); c.lineTo(s/2,s/2); c.closePath(); c.fill();
   }
 
-  function drawSlab(c,s,hue){                                       // 細長直立版
-    var p=hue==='y'?YELL:BLUE;
-    var w=s*0.30, d=s*0.10, dx=d*0.9, dy=d*0.55;
-    var g=c.createLinearGradient(-w/2,-s/2,w/2,s/2);
-    g.addColorStop(0,p.frontA); g.addColorStop(1,p.frontB);
-    c.fillStyle=g; c.fillRect(-w/2,-s/2,w,s);
-    c.fillStyle=p.top;
-    c.beginPath(); c.moveTo(-w/2,-s/2); c.lineTo(-w/2+dx,-s/2-dy);
-    c.lineTo(w/2+dx,-s/2-dy); c.lineTo(w/2,-s/2); c.closePath(); c.fill();
-    c.fillStyle=p.side;
-    c.beginPath(); c.moveTo(w/2,-s/2); c.lineTo(w/2+dx,-s/2-dy);
-    c.lineTo(w/2+dx,s/2-dy); c.lineTo(w/2,s/2); c.closePath(); c.fill();
+  function drawHexPrism(c,s,hue){                                   // 六角柱（擠出厚度）
+    var p=hue==='y'?YELL:BLUE, r=s/2;
+    var ex=s*0.20, ey=s*0.12;                                       // 擠出方向（右下）
+    var v=[];
+    for(var i=0;i<6;i++){ var a=(i/6)*Math.PI*2-Math.PI/2; v.push([Math.cos(a)*r, Math.sin(a)*r]); }
+    c.fillStyle=p.side;                                             // 側面厚度（暗）
+    for(var i=0;i<6;i++){
+      var a=v[i], b=v[(i+1)%6];
+      c.beginPath(); c.moveTo(a[0],a[1]); c.lineTo(b[0],b[1]);
+      c.lineTo(b[0]+ex,b[1]+ey); c.lineTo(a[0]+ex,a[1]+ey); c.closePath(); c.fill();
+    }
+    var g=c.createLinearGradient(-r,-r,r,r);                        // 正面六角
+    g.addColorStop(0,p.hi); g.addColorStop(0.5,p.frontA); g.addColorStop(1,p.frontB);
+    c.fillStyle=g;
+    c.beginPath();
+    for(var i=0;i<6;i++){ if(i===0)c.moveTo(v[i][0],v[i][1]); else c.lineTo(v[i][0],v[i][1]); }
+    c.closePath(); c.fill();
+    c.strokeStyle='rgba(255,255,255,.30)'; c.lineWidth=1;           // 切面
+    for(var i=0;i<6;i++){ c.beginPath(); c.moveTo(0,0); c.lineTo(v[i][0],v[i][1]); c.stroke(); }
   }
 
   function drawPoly(c,s,hue,sides){                                 // 不規則多邊形（寶石感）
@@ -596,7 +603,7 @@
     c.translate(cvs.width/2,cvs.height/2);
     if(blur) c.filter='blur('+blur+'px)';
     if(kind==='cube') drawCube(c,size,hue);
-    else if(kind==='slab') drawSlab(c,size,hue);
+    else if(kind==='hex') drawHexPrism(c,size,hue);
     else drawPoly(c,size,hue,kind);
     return cvs;
   }
@@ -644,8 +651,8 @@
     // 點綴：黃色小方塊與細長版
     addShape('cube', M*0.032,'y',{x:0.50,y:0.10,depth:0.9, alpha:0.9, bobA:8});
     addShape('cube', M*0.026,'y',{x:0.70,y:0.62,depth:1.1, alpha:0.9, bobA:7});
-    addShape('slab', M*0.16, 'y',{x:0.44,y:0.66,depth:0.8, alpha:0.7, bobA:8});
-    addShape('slab', M*0.13, 'b',{x:0.20,y:0.42,depth:0.65,alpha:0.75,bobA:7});
+    addShape('hex', M*0.15, 'y',{x:0.44,y:0.66,depth:0.8, alpha:0.7, bobA:8});
+    addShape('hex', M*0.12, 'b',{x:0.20,y:0.42,depth:0.65,alpha:0.75,bobA:7});
     shapes.sort(function(a,b){return a.depth-b.depth;});             // 遠→近
 
     ctx.fillStyle='#FFFFFF'; ctx.fillRect(0,0,W,H);
@@ -667,7 +674,7 @@
       var raw=s.y*H + bob + py - scrollY*0.10*s.depth;               // 捲動視差，超出畫面即循環
       var yy=((raw%span)+span)%span - s.spr.height/2;
       var xx=s.x*W + px + Math.cos(t*0.0004+s.bobP)*s.bobA*0.5;
-      var wob=(s.kind==='cube'||s.kind==='slab')
+      var wob=(s.kind==='cube'||s.kind==='hex')
         ? Math.sin(t*0.00035+s.bobP)*0.06                            // 方塊只輕微搖擺
         : s.rot;                                                     // 多邊形緩慢自轉
       ctx.save();
@@ -676,7 +683,7 @@
       ctx.rotate(wob);
       ctx.drawImage(s.spr,-s.spr.width/2,-s.spr.height/2);
       ctx.restore();
-      if(s.kind!=='cube'&&s.kind!=='slab') s.rot+=s.spin*16.6;
+      if(s.kind!=='cube'&&s.kind!=='hex') s.rot+=s.spin*16.6;
     }
 
     if(!reduce) requestAnimationFrame(frame);
