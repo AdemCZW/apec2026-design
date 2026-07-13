@@ -10,18 +10,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#05080F;
-    --ink-2:#0A1120;
-    --ink-3:#0E1A2D;
-    --line:rgba(125,160,205,.14);
-    --line-2:rgba(125,160,205,.30);
-    --fg:#E3EDFB;
-    --muted:#8696B4;
-    --muted-2:#5E6F8E;
-    --blue:#4F7BFF;
-    --cyan:#37E2D8;
-    --green:#54F0A8;
-    --glow:linear-gradient(100deg,#4F7BFF 0%,#37E2D8 52%,#54F0A8 100%);
+    --ink:#FFFFFF;
+    --ink-2:#F3F6FC;
+    --ink-3:#E9EEF9;
+    --line:rgba(24,58,130,.12);
+    --line-2:rgba(24,58,130,.26);
+    --fg:#12161F;
+    --muted:#5F6B80;
+    --muted-2:#96A0B2;
+    --blue:#2F6BF6;
+    --cyan:#2F6BF6;
+    --green:#E9C42E;
+    --glow:linear-gradient(100deg,#2F6BF6 0%,#6E9BFA 45%,#E2AE2E 100%);
     --maxw:1240px;
     --pad:clamp(20px,5vw,72px);
   }
@@ -36,7 +36,7 @@
     overflow-x:hidden;
     -webkit-font-smoothing:antialiased;
   }
-  ::selection{background:rgba(55,226,216,.28);color:#fff;}
+  ::selection{background:rgba(47,107,246,.20);color:#0A1B45;}
 
   /* ---------- BACKGROUND CANVAS ---------- */
   #bg{
@@ -46,11 +46,11 @@
   .vignette{
     position:fixed;inset:0;z-index:1;pointer-events:none;
     background:
-      radial-gradient(120% 90% at 50% 0%, transparent 40%, rgba(5,8,15,.55) 100%),
-      radial-gradient(90% 70% at 80% 110%, rgba(79,123,255,.08), transparent 60%);
+      radial-gradient(120% 90% at 50% 0%, transparent 55%, rgba(24,58,130,.05) 100%),
+      radial-gradient(90% 70% at 80% 110%, rgba(242,222,95,.14), transparent 60%);
   }
   .grain{
-    position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.04;mix-blend-mode:screen;
+    position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.05;mix-blend-mode:multiply;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
@@ -82,7 +82,7 @@
     border-bottom:1px solid transparent;
   }
   header.nav.scrolled{
-    background:rgba(5,8,15,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    background:rgba(255,255,255,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
     border-bottom:1px solid var(--line);padding-top:13px;padding-bottom:13px;
   }
   .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--fg);}
@@ -114,7 +114,7 @@
   }
   .rail a{display:flex;align-items:center;gap:10px;text-decoration:none;}
   .rail .dot{width:7px;height:7px;border:1px solid var(--muted-2);transform:rotate(45deg);transition:.3s;}
-  .rail a.active .dot{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 10px rgba(55,226,216,.7);}
+  .rail a.active .dot{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 10px rgba(47,107,246,.5);}
   .rail .lbl{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.14em;color:var(--muted-2);
     text-transform:uppercase;opacity:0;transform:translateX(-6px);transition:.3s;}
   .rail a:hover .lbl,.rail a.active .lbl{opacity:1;transform:translateX(0);}
@@ -128,7 +128,7 @@
   .hero h1 .ln > span{display:inline-block;transform:translateY(105%);animation:rise .9s cubic-bezier(.16,1,.3,1) forwards;}
   .hero h1 .ln:nth-child(2) > span{animation-delay:.12s;}
   @keyframes rise{to{transform:translateY(0);}}
-  .hero .zh{font-family:"Noto Sans TC",sans-serif;font-weight:500;font-size:clamp(1rem,2.4vw,1.5rem);color:#C3D2EC;margin-top:22px;letter-spacing:.04em;opacity:0;animation:fadeUp .8s ease .5s forwards;}
+  .hero .zh{font-family:"Noto Sans TC",sans-serif;font-weight:500;font-size:clamp(1rem,2.4vw,1.5rem);color:#39445A;margin-top:22px;letter-spacing:.04em;opacity:0;animation:fadeUp .8s ease .5s forwards;}
   .hero .meta-row{display:flex;flex-wrap:wrap;gap:0;margin-top:48px;border-top:1px solid var(--line);opacity:0;animation:fadeUp .8s ease .65s forwards;}
   .hero .meta{flex:1 1 200px;padding:22px 26px 22px 0;border-right:1px solid var(--line);}
   .hero .meta:last-child{border-right:none;}
@@ -157,7 +157,7 @@
   [data-reveal][data-d="2"]{transition-delay:.16s;}
   [data-reveal][data-d="3"]{transition-delay:.24s;}
 
-  .panel{background:rgba(10,17,32,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);position:relative;}
+  .panel{background:rgba(255,255,255,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);position:relative;}
   .panel::before,.panel::after{content:"";position:absolute;width:9px;height:9px;border:1px solid var(--line-2);}
   .panel::before{top:-1px;left:-1px;border-right:none;border-bottom:none;}
   .panel::after{bottom:-1px;right:-1px;border-left:none;border-top:none;}
@@ -195,10 +195,10 @@
   .agenda.show{display:block;animation:fadeUp .5s ease;}
   .arow{display:grid;grid-template-columns:138px 1fr;gap:clamp(16px,3vw,46px);padding:24px 0;border-top:1px solid var(--line);position:relative;transition:.3s;}
   .arow:last-child{border-bottom:1px solid var(--line);}
-  .arow:hover{background:linear-gradient(90deg,rgba(55,226,216,.05),transparent 70%);}
+  .arow:hover{background:linear-gradient(90deg,rgba(47,107,246,.06),transparent 70%);}
   .arow .time{font-family:"JetBrains Mono",monospace;font-size:14px;color:var(--cyan);letter-spacing:.02em;padding-left:20px;position:relative;white-space:nowrap;}
   .arow .time::before{content:"";position:absolute;left:0;top:7px;width:7px;height:7px;border:1px solid var(--cyan);transform:rotate(45deg);}
-  .arow:hover .time::before{background:var(--cyan);box-shadow:0 0 8px rgba(55,226,216,.7);}
+  .arow:hover .time::before{background:var(--cyan);box-shadow:0 0 8px rgba(47,107,246,.5);}
   .arow .sess{font-family:"Space Grotesk","Noto Sans TC",sans-serif;font-size:clamp(1.05rem,2vw,1.3rem);font-weight:500;}
   .arow .desc{color:var(--muted);font-size:13.5px;margin-top:6px;line-height:1.6;}
   .arow.brk .sess{color:var(--muted);font-weight:400;font-style:italic;}
@@ -227,8 +227,8 @@
   .v-item .vv{font-size:14.5px;color:var(--fg);}
   .v-item .vv small{color:var(--muted);display:block;font-size:13px;margin-top:3px;font-family:"Noto Sans TC",sans-serif;}
   .map-wrap{background:var(--ink-2);position:relative;min-height:360px;}
-  .map-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;filter:grayscale(.4) invert(.92) hue-rotate(170deg) contrast(.92) brightness(.95);}
-  .map-tag{position:absolute;top:16px;left:16px;z-index:3;background:rgba(5,8,15,.82);backdrop-filter:blur(6px);border:1px solid var(--line-2);
+  .map-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;filter:grayscale(.15) saturate(.95);}
+  .map-tag{position:absolute;top:16px;left:16px;z-index:3;background:rgba(255,255,255,.88);backdrop-filter:blur(6px);border:1px solid var(--line-2);
     padding:8px 14px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.12em;color:var(--cyan);text-transform:uppercase;}
 
   /* ---------- FOOTER ---------- */
@@ -251,7 +251,7 @@
     .navlinks,.navcta{display:none;}
     .burger{display:block;}
     .navlinks.open{display:flex;position:fixed;top:0;right:0;bottom:0;width:78%;max-width:320px;
-      flex-direction:column;align-items:flex-start;gap:8px;background:rgba(8,13,24,.96);backdrop-filter:blur(18px);
+      flex-direction:column;align-items:flex-start;gap:8px;background:rgba(255,255,255,.97);backdrop-filter:blur(18px);
       padding:90px 32px;border-left:1px solid var(--line);z-index:25;}
     .navlinks.open a{font-size:16px;padding:10px 0;}
     .concept-grid{grid-template-columns:1fr;}
@@ -284,7 +284,7 @@
     <span class="mark">
       <svg viewBox="0 0 40 40" fill="none">
         <defs><linearGradient id="bg-g" x1="0" y1="0" x2="40" y2="40">
-          <stop offset="0" stop-color="#4F7BFF"/><stop offset="0.55" stop-color="#37E2D8"/><stop offset="1" stop-color="#54F0A8"/>
+          <stop offset="0" stop-color="#2F6BF6"/><stop offset="0.55" stop-color="#6E9BFA"/><stop offset="1" stop-color="#E9C42E"/>
         </linearGradient></defs>
         <path d="M20 3 L34 11 L34 29 L20 37 L6 29 L6 11 Z" stroke="url(#bg-g)" stroke-width="1.3"/>
         <path d="M20 3 L20 37 M6 11 L34 29 M34 11 L6 29" stroke="url(#bg-g)" stroke-width=".7" opacity=".55"/>
@@ -358,7 +358,7 @@
   <div class="sec-head" data-reveal>
     <span class="sec-ix">01</span>
     <h2 class="sec-title">Design Concept</h2>
-    <p class="sec-sub">三條設計主軸貫穿整場研討會主視覺——以流動線條、串接光點與解構幾何，描繪 AI 與設計的交會。</p>
+    <p class="sec-sub">延續視覺識別的多邊形幾何語言——藍黃配色的規律方塊，逐漸生長出不規則多邊形，在秩序中詮釋創新。</p>
   </div>
   <div class="concept-grid">
     <div class="concept" data-reveal>
@@ -521,8 +521,9 @@
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ============ PALETTE ============ */
-  var STOPS = [ [79,123,255], [55,226,216], [84,240,168] ]; // blue -> cyan -> green
+  var STOPS = [ [47,107,246], [122,160,250], [230,190,60] ]; // blue -> light blue -> yellow
   function grad(t){ // t 0..1 -> [r,g,b]
+    if(!isFinite(t)) t = 0;
     t = Math.max(0, Math.min(1, t));
     var seg = t*(STOPS.length-1), i = Math.floor(seg), f = seg-i;
     var a = STOPS[i], b = STOPS[Math.min(i+1, STOPS.length-1)];
@@ -530,26 +531,84 @@
   }
   function rgba(c,a){ return 'rgba('+(c[0]|0)+','+(c[1]|0)+','+(c[2]|0)+','+a+')'; }
 
-  /* ============ MAIN BACKGROUND FIELD ============ */
+  /* ============ MAIN BACKGROUND — 秩序中的創新：藍黃方塊與多邊形 ============ */
   var cv = document.getElementById('bg'), ctx = cv.getContext('2d');
-  var W=0,H=0,DPR=1, parts=[], crystals=[], t=0;
+  var W=0,H=0,DPR=1, shapes=[], gridPat=null, t=0;
   var mouse={x:0.5,y:0.5,tx:0.5,ty:0.5};
   var scrollY=0;
 
-  function field(x,y,tm){
-    return Math.sin(x*0.0016 + tm*0.00030)*1.45
-         + Math.cos(y*0.0018 - tm*0.00025)*1.45
-         + Math.sin((x+y)*0.0009 + tm*0.00018)*0.85;
+  // 兩組面色：藍方塊 / 黃多邊形（top 亮、front 漸層、side 暗 → 2.5D 立體）
+  var BLUE={hi:'#A7C2FC',top:'#8FB2FC',frontA:'#4A80F8',frontB:'#2B5FEA',side:'#2350D6'};
+  var YELL={hi:'#FCF7BE',top:'#FBF5B0',frontA:'#F7EC85',frontB:'#F0DB55',side:'#E4C93F'};
+
+  function drawCube(c,s,hue){
+    var p=hue==='y'?YELL:BLUE;
+    var d=s*0.42, dx=d*0.86, dy=d*0.5;
+    var g=c.createLinearGradient(-s/2,-s/2,s/2,s/2);
+    g.addColorStop(0,p.frontA); g.addColorStop(1,p.frontB);
+    c.fillStyle=g; c.fillRect(-s/2,-s/2,s,s);                       // front
+    c.fillStyle=p.top;                                              // top
+    c.beginPath(); c.moveTo(-s/2,-s/2); c.lineTo(-s/2+dx,-s/2-dy);
+    c.lineTo(s/2+dx,-s/2-dy); c.lineTo(s/2,-s/2); c.closePath(); c.fill();
+    c.fillStyle=p.side;                                             // side
+    c.beginPath(); c.moveTo(s/2,-s/2); c.lineTo(s/2+dx,-s/2-dy);
+    c.lineTo(s/2+dx,s/2-dy); c.lineTo(s/2,s/2); c.closePath(); c.fill();
   }
 
-  function makeCrystal(cx,cy,r,sides,col,depth,spin){
-    var pts=[];
+  function drawSlab(c,s,hue){                                       // 細長直立版
+    var p=hue==='y'?YELL:BLUE;
+    var w=s*0.30, d=s*0.10, dx=d*0.9, dy=d*0.55;
+    var g=c.createLinearGradient(-w/2,-s/2,w/2,s/2);
+    g.addColorStop(0,p.frontA); g.addColorStop(1,p.frontB);
+    c.fillStyle=g; c.fillRect(-w/2,-s/2,w,s);
+    c.fillStyle=p.top;
+    c.beginPath(); c.moveTo(-w/2,-s/2); c.lineTo(-w/2+dx,-s/2-dy);
+    c.lineTo(w/2+dx,-s/2-dy); c.lineTo(w/2,-s/2); c.closePath(); c.fill();
+    c.fillStyle=p.side;
+    c.beginPath(); c.moveTo(w/2,-s/2); c.lineTo(w/2+dx,-s/2-dy);
+    c.lineTo(w/2+dx,s/2-dy); c.lineTo(w/2,s/2); c.closePath(); c.fill();
+  }
+
+  function drawPoly(c,s,hue,sides){                                 // 不規則多邊形（寶石感）
+    var p=hue==='y'?YELL:BLUE, r=s/2;
+    var g=c.createLinearGradient(-r,-r,r,r);
+    g.addColorStop(0,p.hi); g.addColorStop(0.55,p.frontA); g.addColorStop(1,p.frontB);
+    c.fillStyle=g;
+    c.beginPath();
     for(var i=0;i<sides;i++){
-      var a=(i/sides)*Math.PI*2;
-      pts.push([Math.cos(a)*r, Math.sin(a)*r]);
+      var a=(i/sides)*Math.PI*2-Math.PI/2;
+      var x=Math.cos(a)*r, y=Math.sin(a)*r;
+      if(i===0)c.moveTo(x,y); else c.lineTo(x,y);
     }
-    return {cx:cx,cy:cy,r:r,pts:pts,sides:sides,col:col,depth:depth,
-            rot:Math.random()*Math.PI, spin:spin, phase:Math.random()*Math.PI*2};
+    c.closePath(); c.fill();
+    c.strokeStyle='rgba(255,255,255,.35)'; c.lineWidth=1;           // 內折面
+    for(var i=0;i<sides;i++){
+      var a=(i/sides)*Math.PI*2-Math.PI/2;
+      c.beginPath(); c.moveTo(0,0); c.lineTo(Math.cos(a)*r,Math.sin(a)*r); c.stroke();
+    }
+  }
+
+  function makeSprite(kind,size,hue,blur){                          // 預渲染 sprite，跑動畫只 drawImage
+    var pad=Math.ceil(size*0.55)+(blur||0)*3+6;
+    var cvs=document.createElement('canvas');
+    cvs.width=Math.ceil(size)+pad*2; cvs.height=Math.ceil(size)+pad*2;
+    var c=cvs.getContext('2d');
+    c.translate(cvs.width/2,cvs.height/2);
+    if(blur) c.filter='blur('+blur+'px)';
+    if(kind==='cube') drawCube(c,size,hue);
+    else if(kind==='slab') drawSlab(c,size,hue);
+    else drawPoly(c,size,hue,kind);
+    return cvs;
+  }
+
+  function addShape(kind,size,hue,o){
+    shapes.push({
+      spr:makeSprite(kind,size,hue,o.blur||0),
+      x:o.x, y:o.y, depth:o.depth, alpha:o.alpha,
+      rot:(Math.random()-0.5)*0.5, spin:o.spin||0,
+      bobA:o.bobA||10, bobP:Math.random()*Math.PI*2,
+      kind:kind
+    });
   }
 
   function resize(){
@@ -559,115 +618,66 @@
     cv.style.width=W+'px'; cv.style.height=H+'px';
     ctx.setTransform(DPR,0,0,DPR,0,0);
 
-    var count = Math.round(Math.min(115, Math.max(46, (W*H)/15000)));
-    parts=[];
-    for(var i=0;i<count;i++){
-      parts.push({
-        x:Math.random()*W, y:Math.random()*H,
-        px:0, py:0, init:false,
-        t:Math.random(),
-        sp:0.4+Math.random()*0.7
-      });
-    }
-    // three deconstructed "minerals"
-    crystals=[
-      makeCrystal(W*0.80, H*0.30, Math.min(W,H)*0.16, 6, [79,123,255], 0.5, 0.00022),
-      makeCrystal(W*0.18, H*0.72, Math.min(W,H)*0.12, 6, [55,226,216], 0.85, -0.00030),
-      makeCrystal(W*0.62, H*0.82, Math.min(W,H)*0.085,6, [84,240,168], 1.2, 0.00040)
+    // 秩序的基底：規律方點網格
+    var tile=document.createElement('canvas'); tile.width=tile.height=56;
+    var tc=tile.getContext('2d');
+    tc.fillStyle='rgba(47,107,246,0.10)'; tc.fillRect(27,27,2,2);
+    gridPat=ctx.createPattern(tile,'repeat');
+
+    var M=Math.min(W,H);
+    shapes=[];
+    // 遠景：大顆模糊黃色多邊形（景深）
+    addShape(6, M*0.46,'y',{x:0.88,y:0.70,depth:0.30,alpha:0.42,blur:12,spin:0.00016,bobA:14});
+    addShape(5, M*0.30,'y',{x:0.06,y:0.34,depth:0.26,alpha:0.38,blur:8, spin:-0.00012,bobA:12});
+    addShape(7, M*0.36,'y',{x:0.74,y:0.14,depth:0.55,alpha:0.55,blur:2, spin:0.00022,bobA:10});
+    addShape(6, M*0.18,'y',{x:0.30,y:0.86,depth:0.70,alpha:0.60,blur:1, spin:-0.00028,bobA:9});
+    // 中景：藍色方塊（規律網格色塊）
+    var cubes=[
+      [0.16,0.16,0.075],[0.42,0.30,0.045],[0.62,0.42,0.085],[0.86,0.36,0.038],
+      [0.10,0.62,0.055],[0.34,0.56,0.030],[0.55,0.74,0.065],[0.78,0.86,0.050],
+      [0.94,0.55,0.030],[0.24,0.94,0.042]
     ];
-    // clear once
-    ctx.fillStyle='#05080F'; ctx.fillRect(0,0,W,H);
+    for(var i=0;i<cubes.length;i++){
+      var cb=cubes[i];
+      addShape('cube', M*cb[2],'b',{x:cb[0],y:cb[1],depth:0.55+(i%4)*0.22,alpha:0.9,blur:i%5===4?2:0,bobA:6+(i%3)*4});
+    }
+    // 點綴：黃色小方塊與細長版
+    addShape('cube', M*0.032,'y',{x:0.50,y:0.10,depth:0.9, alpha:0.9, bobA:8});
+    addShape('cube', M*0.026,'y',{x:0.70,y:0.62,depth:1.1, alpha:0.9, bobA:7});
+    addShape('slab', M*0.16, 'y',{x:0.44,y:0.66,depth:0.8, alpha:0.7, bobA:8});
+    addShape('slab', M*0.13, 'b',{x:0.20,y:0.42,depth:0.65,alpha:0.75,bobA:7});
+    shapes.sort(function(a,b){return a.depth-b.depth;});             // 遠→近
+
+    ctx.fillStyle='#FFFFFF'; ctx.fillRect(0,0,W,H);
   }
 
-  function drawCrystal(c, mx, my){
-    var px = (mx-0.5)*60*c.depth + (-scrollY*0.05*c.depth);
-    var py = (my-0.5)*60*c.depth;
-    var ox = c.cx + px, oy = c.cy + py;
-    var rot = c.rot;
-    var breath = 1 + Math.sin(t*0.0006 + c.phase)*0.10;          // pulse
-    var decon = 6 + Math.sin(t*0.0004 + c.phase)*6;               // deconstruct gap
-
-    var verts=[];
-    for(var i=0;i<c.sides;i++){
-      var p=c.pts[i];
-      var rx = p[0]*Math.cos(rot)-p[1]*Math.sin(rot);
-      var ry = p[0]*Math.sin(rot)+p[1]*Math.cos(rot);
-      rx*=breath; ry*=breath;
-      var len=Math.sqrt(rx*rx+ry*ry)||1;
-      verts.push([ox+rx+(rx/len)*decon, oy+ry+(ry/len)*decon, ox+rx, oy+ry]);
-    }
-    // outer shards (deconstructed edges)
-    ctx.lineWidth=1;
-    for(var i=0;i<c.sides;i++){
-      var a=verts[i], b=verts[(i+1)%c.sides];
-      var g=ctx.createLinearGradient(a[0],a[1],b[0],b[1]);
-      g.addColorStop(0,rgba(c.col,0.55)); g.addColorStop(1,rgba(c.col,0.10));
-      ctx.strokeStyle=g; ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke();
-    }
-    // inner mesh (mechanical grid feel) to center
-    ctx.strokeStyle=rgba(c.col,0.14);
-    for(var i=0;i<c.sides;i++){
-      ctx.beginPath(); ctx.moveTo(verts[i][2],verts[i][3]); ctx.lineTo(ox,oy); ctx.stroke();
-    }
-    // vertex nodes
-    for(var i=0;i<c.sides;i++){
-      ctx.fillStyle=rgba(c.col,0.85);
-      ctx.beginPath(); ctx.arc(verts[i][0],verts[i][1],1.6,0,Math.PI*2); ctx.fill();
-    }
-    ctx.fillStyle=rgba(c.col,0.9);
-    ctx.beginPath(); ctx.arc(ox,oy,2.2,0,Math.PI*2); ctx.fill();
-    c.rot += c.spin*16.6;
-  }
-
-  var CONN=150, CONN2=CONN*CONN;
   function frame(){
     t+=16.6;
     mouse.x+=(mouse.tx-mouse.x)*0.05; mouse.y+=(mouse.ty-mouse.y)*0.05;
 
-    // translucent clear -> flowing trails (line-forward look)
-    ctx.fillStyle='rgba(5,8,15,0.16)';
-    ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='#FFFFFF'; ctx.fillRect(0,0,W,H);
+    if(gridPat){ ctx.fillStyle=gridPat; ctx.fillRect(0,0,W,H); }
 
-    var pfx=(mouse.x-0.5)*30, pfy=(mouse.y-0.5)*30;
-
-    // update + draw particles & tails
-    for(var i=0;i<parts.length;i++){
-      var p=parts[i];
-      var ang=field(p.x+pfx, p.y+pfy, t);
-      p.x += Math.cos(ang)*p.sp;
-      p.y += Math.sin(ang)*p.sp;
-      if(p.x<-20)p.x=W+20; if(p.x>W+20)p.x=-20;
-      if(p.y<-20)p.y=H+20; if(p.y>H+20)p.y=-20;
-
-      var c=grad((p.t + p.x/W*0.5));
-      if(p.init && Math.abs(p.x-p.px)<60 && Math.abs(p.y-p.py)<60){
-        ctx.strokeStyle=rgba(c,0.22); ctx.lineWidth=1;
-        ctx.beginPath(); ctx.moveTo(p.px,p.py); ctx.lineTo(p.x,p.y); ctx.stroke();
-      }
-      p.px=p.x; p.py=p.y; p.init=true;
+    for(var i=0;i<shapes.length;i++){
+      var s=shapes[i];
+      var px=(mouse.x-0.5)*46*s.depth;
+      var py=(mouse.y-0.5)*30*s.depth;
+      var bob=Math.sin(t*0.0005+s.bobP)*s.bobA;
+      var span=H+s.spr.height;
+      var raw=s.y*H + bob + py - scrollY*0.10*s.depth;               // 捲動視差，超出畫面即循環
+      var yy=((raw%span)+span)%span - s.spr.height/2;
+      var xx=s.x*W + px + Math.cos(t*0.0004+s.bobP)*s.bobA*0.5;
+      var wob=(s.kind==='cube'||s.kind==='slab')
+        ? Math.sin(t*0.00035+s.bobP)*0.06                            // 方塊只輕微搖擺
+        : s.rot;                                                     // 多邊形緩慢自轉
+      ctx.save();
+      ctx.globalAlpha=s.alpha;
+      ctx.translate(xx,yy);
+      ctx.rotate(wob);
+      ctx.drawImage(s.spr,-s.spr.width/2,-s.spr.height/2);
+      ctx.restore();
+      if(s.kind!=='cube'&&s.kind!=='slab') s.rot+=s.spin*16.6;
     }
-
-    // connections (data exchange)
-    for(var i=0;i<parts.length;i++){
-      var a=parts[i];
-      for(var j=i+1;j<parts.length;j++){
-        var b=parts[j];
-        var dx=a.x-b.x, dy=a.y-b.y, d2=dx*dx+dy*dy;
-        if(d2<CONN2){
-          var al=(1-Math.sqrt(d2)/CONN)*0.38;
-          var c=grad((a.x+b.x)/(2*W));
-          ctx.strokeStyle=rgba(c,al); ctx.lineWidth=0.8;
-          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
-        }
-      }
-      // node
-      var c=grad((a.t + a.x/W*0.5));
-      ctx.fillStyle=rgba(c,0.9);
-      ctx.beginPath(); ctx.arc(a.x,a.y,1.5,0,Math.PI*2); ctx.fill();
-    }
-
-    // crystals on top
-    for(var k=0;k<crystals.length;k++) drawCrystal(crystals[k], mouse.x, mouse.y);
 
     if(!reduce) requestAnimationFrame(frame);
   }
@@ -684,6 +694,7 @@
       for(var i=0;i<n;i++) nodes.push({x:Math.random()*w,y:Math.random()*h,a:Math.random()*6.28,sp:0.3+Math.random()*0.5});
     }
     function draw(){
+      if(!w||!h){ rs(); if(!reduce) raf=requestAnimationFrame(draw); return; }
       tt+=16.6; c.clearRect(0,0,w,h);
       if(type==='flow'){
         for(var i=0;i<nodes.length;i++){
@@ -712,7 +723,7 @@
           branch(nx,ny,ang+0.5+sway,len*0.72,d+1);
         })(cx,cy,-Math.PI/2,h*0.22,0);
       } else { // fusion: grid + organic line
-        c.strokeStyle=rgba([79,123,255],0.18); c.lineWidth=0.6;
+        c.strokeStyle=rgba([47,107,246],0.14); c.lineWidth=0.6;
         var gs=18;
         for(var gx=0;gx<=w;gx+=gs){c.beginPath();c.moveTo(gx,0);c.lineTo(gx,h);c.stroke();}
         for(var gy=0;gy<=h;gy+=gs){c.beginPath();c.moveTo(0,gy);c.lineTo(w,gy);c.stroke();}
@@ -722,7 +733,7 @@
           if(x===0)c.moveTo(x,y); else c.lineTo(x,y);
         }
         var lg=c.createLinearGradient(0,0,w,0);
-        lg.addColorStop(0,rgba([79,123,255],0.9));lg.addColorStop(0.5,rgba([55,226,216],0.9));lg.addColorStop(1,rgba([84,240,168],0.9));
+        lg.addColorStop(0,rgba([47,107,246],0.9));lg.addColorStop(0.5,rgba([122,160,250],0.9));lg.addColorStop(1,rgba([230,180,45],0.9));
         c.strokeStyle=lg; c.stroke();
       }
       if(!reduce) raf=requestAnimationFrame(draw);
@@ -737,6 +748,7 @@
     function rs(){w=canvas.clientWidth;h=canvas.clientHeight;dpr=Math.min(window.devicePixelRatio||1,2);
       canvas.width=w*dpr;canvas.height=h*dpr;c.setTransform(dpr,0,0,dpr,0,0);}
     function draw(){
+      if(!w||!h){ rs(); if(!reduce) requestAnimationFrame(draw); return; }
       tt+=16.6; c.clearRect(0,0,w,h);
       var cx=w/2, cy=h*0.42, R=Math.min(w,h)*0.26, sides=6;
       var col=STOPS[seed%3], rot=tt*0.0003+seed;
