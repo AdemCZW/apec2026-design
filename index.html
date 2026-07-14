@@ -11,17 +11,17 @@
 <style>
   :root{
     --ink:#FFFFFF;
-    --ink-2:#F3F6FC;
-    --ink-3:#E9EEF9;
-    --line:rgba(24,58,130,.12);
-    --line-2:rgba(24,58,130,.26);
-    --fg:#12161F;
-    --muted:#5F6B80;
-    --muted-2:#96A0B2;
-    --blue:#2F6BF6;
-    --cyan:#2F6BF6;
-    --green:#E9C42E;
-    --glow:linear-gradient(100deg,#2F6BF6 0%,#6E9BFA 45%,#E2AE2E 100%);
+    --ink-2:#F1F5FF;
+    --ink-3:#E6EDFF;
+    --line:rgba(11,60,200,.13);
+    --line-2:rgba(11,60,200,.28);
+    --fg:#0A1020;
+    --muted:#586A8C;
+    --muted-2:#93A0BC;
+    --blue:#0B4CF0;
+    --cyan:#0B4CF0;
+    --green:#F2F000;
+    --glow:linear-gradient(100deg,#0B4CF0 0%,#12A9F5 52%,#00D7F5 100%);
     --maxw:1240px;
     --pad:clamp(20px,5vw,72px);
   }
@@ -36,7 +36,7 @@
     overflow-x:hidden;
     -webkit-font-smoothing:antialiased;
   }
-  ::selection{background:rgba(47,107,246,.20);color:#0A1B45;}
+  ::selection{background:#F2F000;color:#06122E;}
 
   /* ---------- BACKGROUND CANVAS ---------- */
   #bg{
@@ -121,12 +121,14 @@
   .rail a.active .lbl{color:var(--muted);}
 
   /* ---------- HERO ---------- */
-  .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-top:120px;padding-bottom:64px;position:relative;}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+  .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-top:104px;padding-bottom:64px;position:relative;}
   .hero .full-name{max-width:560px;color:var(--muted);font-size:13px;line-height:1.7;margin-top:18px;font-family:"JetBrains Mono",monospace;letter-spacing:.02em;}
-  .hero h1{font-size:clamp(2.7rem,8.4vw,7.4rem);font-weight:700;margin-top:26px;}
-  .hero h1 .ln{display:block;overflow:hidden;}
-  .hero h1 .ln > span{display:inline-block;transform:translateY(105%);animation:rise .9s cubic-bezier(.16,1,.3,1) forwards;}
-  .hero h1 .ln:nth-child(2) > span{animation-delay:.12s;}
+
+  /* KV 主視覺（核准正式稿）*/
+  .hero .kv{margin:22px 0 4px;position:relative;}
+  .hero .kv img{display:block;width:100%;height:auto;
+    filter:drop-shadow(0 30px 60px rgba(11,60,200,.10));}
   @keyframes rise{to{transform:translateY(0);}}
   .hero .zh{font-family:"Noto Sans TC",sans-serif;font-weight:500;font-size:clamp(1rem,2.4vw,1.5rem);color:#39445A;margin-top:22px;letter-spacing:.04em;opacity:0;animation:fadeUp .8s ease .5s forwards;}
   .hero .meta-row{display:flex;flex-wrap:wrap;gap:0;margin-top:48px;border-top:1px solid var(--line);opacity:0;animation:fadeUp .8s ease .65s forwards;}
@@ -190,7 +192,7 @@
   .tab.active{color:var(--ink);background:var(--cyan);}
   .tab small{display:block;font-size:10px;letter-spacing:.1em;opacity:.7;margin-top:2px;font-weight:400;text-transform:none;}
   .day-loc{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--muted);letter-spacing:.04em;margin-bottom:30px;display:flex;align-items:center;gap:10px;}
-  .day-loc .dia{width:6px;height:6px;background:var(--green);transform:rotate(45deg);}
+  .day-loc .dia{width:6px;height:6px;background:var(--blue);transform:rotate(45deg);}
   .agenda{display:none;}
   .agenda.show{display:block;animation:fadeUp .5s ease;}
   .arow{display:grid;grid-template-columns:138px 1fr;gap:clamp(16px,3vw,46px);padding:24px 0;border-top:1px solid var(--line);position:relative;transition:.3s;}
@@ -213,7 +215,7 @@
   .spk .bot .tba{font-family:"Space Grotesk",sans-serif;font-size:1.15rem;font-weight:500;color:var(--fg);}
   .spk .bot .role{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.08em;color:var(--cyan);margin-top:6px;text-transform:uppercase;}
   .spk-note{margin-top:24px;font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--muted);letter-spacing:.04em;display:flex;align-items:center;gap:10px;}
-  .spk-note .blink{width:7px;height:7px;background:var(--green);border-radius:50%;animation:blink 1.6s ease-in-out infinite;}
+  .spk-note .blink{width:7px;height:7px;background:var(--blue);border-radius:50%;animation:blink 1.6s ease-in-out infinite;}
   @keyframes blink{0%,100%{opacity:1;}50%{opacity:.25;}}
 
   /* ---------- VENUE ---------- */
@@ -323,11 +325,14 @@
 <!-- HERO -->
 <section class="hero wrap" id="hero">
   <div>
+    <h1 class="sr-only">AI-Driven Design Innovation — 2026 APEC International Seminar, Taipei</h1>
     <span class="eyebrow lead"><i class="dia"></i>&nbsp;2026 APEC International Seminar · Taipei</span>
-    <h1>
-      <span class="ln"><span>AI-Driven</span></span>
-      <span class="ln"><span class="gclip">Design Innovation</span></span>
-    </h1>
+
+    <figure class="kv">
+      <img src="kv.webp" width="1920" height="1100"
+           alt="AI-Driven Design Innovation — 2026 APEC, Sep 16–17, 台灣設計研究院 創意劇場，藍黃玻璃質感 3D 幾何主視覺" />
+    </figure>
+
     <p class="zh">2026 APEC 透過 AI 技術驅動設計創新國際研討會</p>
     <p class="full-name">Driving Regional Industrial Design Innovation through AI Technology to Enhance MSMEs' Global Market Competitiveness.</p>
 
@@ -521,7 +526,7 @@
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ============ PALETTE ============ */
-  var STOPS = [ [47,107,246], [122,160,250], [230,190,60] ]; // blue -> light blue -> yellow
+  var STOPS = [ [11,76,240], [18,169,245], [0,215,245] ]; // cobalt -> sky -> cyan（KV 玻璃藍光）
   function grad(t){ // t 0..1 -> [r,g,b]
     if(!isFinite(t)) t = 0;
     t = Math.max(0, Math.min(1, t));
@@ -537,9 +542,9 @@
   var mouse={x:0.5,y:0.5,tx:0.5,ty:0.5};
   var scrollY=0;
 
-  // 兩組面色：藍方塊 / 黃多邊形（top 亮、front 漸層、side 暗 → 2.5D 立體）
-  var BLUE={hi:'#A7C2FC',top:'#8FB2FC',frontA:'#4A80F8',frontB:'#2B5FEA',side:'#2350D6'};
-  var YELL={hi:'#FCF7BE',top:'#FBF5B0',frontA:'#F7EC85',frontB:'#F0DB55',side:'#E4C93F'};
+  // 兩組面色（呼應 KV：電光鈷藍＋青高光 / 純螢光黃）top 亮、front 漸層、side 暗 → 2.5D 立體
+  var BLUE={hi:'#7FE3FF',top:'#3FAEF7',frontA:'#0E63F5',frontB:'#0A3CE0',side:'#0A30BC'};
+  var YELL={hi:'#FCFCC0',top:'#FBFB66',frontA:'#F2F000',frontB:'#E4E200',side:'#CBC800'};
 
   function drawCube(c,s,hue){
     var p=hue==='y'?YELL:BLUE;
@@ -576,6 +581,36 @@
     for(var i=0;i<sides;i++){ c.beginPath(); c.moveTo(0,0); c.lineTo(v[i][0],v[i][1]); c.stroke(); }
   }
 
+  function drawPlus(c,s,hue){                                       // 十字（KV plus 主造型，擠出）
+    var p=hue==='y'?YELL:BLUE, a=s/2, w=s*0.19, ex=s*0.16, ey=s*0.10;
+    var v=[[-w,-a],[w,-a],[w,-w],[a,-w],[a,w],[w,w],[w,a],[-w,a],[-w,w],[-a,w],[-a,-w],[-w,-w]];
+    c.fillStyle=p.side;                                             // 側面厚度
+    for(var i=0;i<v.length;i++){
+      var A=v[i], B=v[(i+1)%v.length];
+      c.beginPath(); c.moveTo(A[0],A[1]); c.lineTo(B[0],B[1]);
+      c.lineTo(B[0]+ex,B[1]+ey); c.lineTo(A[0]+ex,A[1]+ey); c.closePath(); c.fill();
+    }
+    var g=c.createLinearGradient(-a,-a,a,a);                        // 正面：青高光→鈷藍
+    g.addColorStop(0,p.hi); g.addColorStop(0.5,p.frontA); g.addColorStop(1,p.frontB);
+    c.fillStyle=g;
+    c.beginPath();
+    for(var i=0;i<v.length;i++){ if(i===0)c.moveTo(v[i][0],v[i][1]); else c.lineTo(v[i][0],v[i][1]); }
+    c.closePath(); c.fill();
+    c.strokeStyle='rgba(255,255,255,.22)'; c.lineWidth=1;           // 高光邊
+    c.stroke();
+  }
+
+  function drawShard(c,s,hue){                                      // 黃色閃電碎片（KV 斜切塊面，平面）
+    var p=hue==='y'?YELL:BLUE, r=s/2;
+    var v=[[-.20,-1],[.30,-1],[.02,-.08],[.34,-.08],[-.26,1],[-.02,.02],[-.34,.02]];
+    var g=c.createLinearGradient(-r,-r,r,r);
+    g.addColorStop(0,p.top); g.addColorStop(1,p.frontA);
+    c.fillStyle=g;
+    c.beginPath();
+    for(var i=0;i<v.length;i++){ var x=v[i][0]*r, y=v[i][1]*r; if(i===0)c.moveTo(x,y); else c.lineTo(x,y); }
+    c.closePath(); c.fill();
+  }
+
   function drawPoly(c,s,hue,sides){                                 // 不規則多邊形（寶石感）
     var p=hue==='y'?YELL:BLUE, r=s/2;
     var g=c.createLinearGradient(-r,-r,r,r);
@@ -605,6 +640,8 @@
     if(kind==='cube') drawCube(c,size,hue);
     else if(kind==='hex') drawPrism(c,size,hue,6);
     else if(kind==='tri') drawPrism(c,size,hue,3);
+    else if(kind==='plus') drawPlus(c,size,hue);
+    else if(kind==='shard') drawShard(c,size,hue);
     else drawPoly(c,size,hue,kind);
     return cvs;
   }
@@ -613,7 +650,7 @@
     shapes.push({
       spr:makeSprite(kind,size,hue,o.blur||0),
       x:o.x, y:o.y, depth:o.depth, alpha:o.alpha,
-      rot:(Math.random()-0.5)*0.5, spin:o.spin||0,
+      rot:(Math.random()-0.5)*0.5, spin:o.spin||0, tilt:o.tilt||0,
       bobA:o.bobA||10, bobP:Math.random()*Math.PI*2,
       kind:kind
     });
@@ -629,30 +666,27 @@
     // 秩序的基底：規律方點網格
     var tile=document.createElement('canvas'); tile.width=tile.height=56;
     var tc=tile.getContext('2d');
-    tc.fillStyle='rgba(47,107,246,0.10)'; tc.fillRect(27,27,2,2);
+    tc.fillStyle='rgba(11,60,200,0.09)'; tc.fillRect(27,27,2,2);
     gridPat=ctx.createPattern(tile,'repeat');
 
     var M=Math.min(W,H);
     shapes=[];
-    // 遠景：大顆模糊黃色多邊形（景深）
-    addShape(6, M*0.46,'y',{x:0.88,y:0.70,depth:0.30,alpha:0.42,blur:12,spin:0.00016,bobA:14});
-    addShape(5, M*0.30,'y',{x:0.06,y:0.34,depth:0.26,alpha:0.38,blur:8, spin:-0.00012,bobA:12});
-    addShape(7, M*0.36,'y',{x:0.74,y:0.14,depth:0.55,alpha:0.55,blur:2, spin:0.00022,bobA:10});
-    addShape(6, M*0.18,'y',{x:0.30,y:0.86,depth:0.70,alpha:0.60,blur:1, spin:-0.00028,bobA:9});
-    // 遠景淡藍多邊形（補景深）
-    addShape(6, M*0.30,'b',{x:0.70,y:0.12,depth:0.34,alpha:0.14,blur:9, spin:0.00018,bobA:11});
-    // 中景：大顆藍色立體（方塊＋六角柱＋三角柱），數量精簡
-    addShape('cube', M*0.135,'b',{x:0.60,y:0.40,depth:0.85,alpha:0.92,bobA:8});
-    addShape('cube', M*0.100,'b',{x:0.14,y:0.17,depth:0.72,alpha:0.90,bobA:7});
-    addShape('hex',  M*0.165,'b',{x:0.20,y:0.44,depth:0.62,alpha:0.85,bobA:8});
-    addShape('tri',  M*0.150,'y',{x:0.82,y:0.84,depth:0.78,alpha:0.85,bobA:9});
-    addShape('hex',  M*0.120,'y',{x:0.46,y:0.66,depth:0.92,alpha:0.80,bobA:8});
-    addShape('cube', M*0.078,'b',{x:0.88,y:0.58,depth:1.05,alpha:0.90,bobA:9});
-    addShape('tri',  M*0.105,'b',{x:0.37,y:0.82,depth:1.00,alpha:0.85,bobA:8});
-    addShape('cube', M*0.090,'b',{x:0.94,y:0.30,depth:0.60,alpha:0.85,blur:2,bobA:7});
+    // 遠景：黃色閃電碎片（KV 斜切塊面）＋淡多邊形，低調鋪底
+    addShape('shard', M*1.15,'y',{x:0.60,y:0.32,depth:0.22,alpha:0.15,blur:6, tilt:-0.52,bobA:10});
+    addShape('shard', M*0.85,'y',{x:0.15,y:0.74,depth:0.20,alpha:0.12,blur:6, tilt:-0.34,bobA:9});
+    addShape(6, M*0.42,'y',{x:0.90,y:0.68,depth:0.28,alpha:0.20,blur:12,spin:0.00015,bobA:14});
+    addShape(6, M*0.30,'b',{x:0.72,y:0.12,depth:0.32,alpha:0.10,blur:9, spin:0.00018,bobA:11});
+    // 中景：藍色立體（plus 十字為 KV 主角，配方塊/六角/三角）
+    addShape('plus', M*0.150,'b',{x:0.63,y:0.40,depth:0.85,alpha:0.92,tilt:0.12, bobA:8});
+    addShape('plus', M*0.090,'b',{x:0.30,y:0.26,depth:0.72,alpha:0.90,tilt:-0.18,bobA:7});
+    addShape('cube', M*0.120,'b',{x:0.20,y:0.46,depth:0.62,alpha:0.88,bobA:8});
+    addShape('hex',  M*0.130,'b',{x:0.86,y:0.58,depth:0.70,alpha:0.85,bobA:8});
+    addShape('cube', M*0.085,'b',{x:0.90,y:0.30,depth:0.95,alpha:0.85,blur:2,bobA:7});
+    addShape('tri',  M*0.120,'y',{x:0.40,y:0.82,depth:0.85,alpha:0.82,bobA:9});
+    addShape('cube', M*0.070,'y',{x:0.50,y:0.12,depth:1.05,alpha:0.90,bobA:8});
     // 前景點綴：少量小顆
-    addShape('cube', M*0.036,'y',{x:0.50,y:0.10,depth:1.18,alpha:0.95,bobA:9});
-    addShape('hex',  M*0.050,'y',{x:0.72,y:0.55,depth:1.22,alpha:0.90,bobA:8});
+    addShape('plus', M*0.045,'y',{x:0.73,y:0.55,depth:1.20,alpha:0.92,tilt:0.20,bobA:8});
+    addShape('cube', M*0.035,'b',{x:0.34,y:0.66,depth:1.25,alpha:0.90,bobA:9});
     shapes.sort(function(a,b){return a.depth-b.depth;});             // 遠→近
 
     ctx.fillStyle='#FFFFFF'; ctx.fillRect(0,0,W,H);
@@ -661,6 +695,8 @@
   function frame(){
     t+=16.6;
     mouse.x+=(mouse.tx-mouse.x)*0.05; mouse.y+=(mouse.ty-mouse.y)*0.05;
+    // Hero 讓位給 KV：捲動前背景幾何壓低，進入下方區塊才全強度
+    cv.style.opacity=(0.30+Math.min(0.70, scrollY/520)).toFixed(3);
 
     ctx.fillStyle='#FFFFFF'; ctx.fillRect(0,0,W,H);
     if(gridPat){ ctx.fillStyle=gridPat; ctx.fillRect(0,0,W,H); }
@@ -674,8 +710,8 @@
       var raw=s.y*H + bob + py - scrollY*0.10*s.depth;               // 捲動視差，超出畫面即循環
       var yy=((raw%span)+span)%span - s.spr.height/2;
       var xx=s.x*W + px + Math.cos(t*0.0004+s.bobP)*s.bobA*0.5;
-      var wob=(s.kind==='cube'||s.kind==='hex'||s.kind==='tri')
-        ? Math.sin(t*0.00035+s.bobP)*0.06                            // 立體只輕微搖擺
+      var wob=(s.kind==='cube'||s.kind==='hex'||s.kind==='tri'||s.kind==='plus'||s.kind==='shard')
+        ? s.tilt + Math.sin(t*0.00035+s.bobP)*0.05                   // 立體/碎片只輕微搖擺（可帶固定傾角）
         : s.rot;                                                     // 平面多邊形緩慢自轉
       ctx.save();
       ctx.globalAlpha=s.alpha;
@@ -683,7 +719,7 @@
       ctx.rotate(wob);
       ctx.drawImage(s.spr,-s.spr.width/2,-s.spr.height/2);
       ctx.restore();
-      if(s.kind!=='cube'&&s.kind!=='hex'&&s.kind!=='tri') s.rot+=s.spin*16.6;
+      if(s.kind==='hept'||s.kind===5||s.kind===6||s.kind===7) s.rot+=s.spin*16.6;
     }
 
     if(!reduce) requestAnimationFrame(frame);
@@ -730,7 +766,7 @@
           branch(nx,ny,ang+0.5+sway,len*0.72,d+1);
         })(cx,cy,-Math.PI/2,h*0.22,0);
       } else { // fusion: grid + organic line
-        c.strokeStyle=rgba([47,107,246],0.14); c.lineWidth=0.6;
+        c.strokeStyle=rgba([11,76,240],0.12); c.lineWidth=0.6;
         var gs=18;
         for(var gx=0;gx<=w;gx+=gs){c.beginPath();c.moveTo(gx,0);c.lineTo(gx,h);c.stroke();}
         for(var gy=0;gy<=h;gy+=gs){c.beginPath();c.moveTo(0,gy);c.lineTo(w,gy);c.stroke();}
@@ -740,7 +776,7 @@
           if(x===0)c.moveTo(x,y); else c.lineTo(x,y);
         }
         var lg=c.createLinearGradient(0,0,w,0);
-        lg.addColorStop(0,rgba([47,107,246],0.9));lg.addColorStop(0.5,rgba([122,160,250],0.9));lg.addColorStop(1,rgba([230,180,45],0.9));
+        lg.addColorStop(0,rgba([11,76,240],0.9));lg.addColorStop(0.5,rgba([18,169,245],0.95));lg.addColorStop(1,rgba([0,215,245],0.95));
         c.strokeStyle=lg; c.stroke();
       }
       if(!reduce) raf=requestAnimationFrame(draw);
