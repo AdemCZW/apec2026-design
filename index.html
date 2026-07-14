@@ -585,17 +585,17 @@
 
   /* ============ MAIN BACKGROUND — 秩序中的創新：藍黃方塊與多邊形 ============ */
   var cv = document.getElementById('bg'), ctx = cv.getContext('2d');
-  var W=0,H=0,DPR=1, shapes=[], streaks=[], gridPat=null, t=0;
+  var W=0,H=0,LW=0,LH=0,DPR=1, shapes=[], streaks=[], gridPat=null, t=0;
   var mouse={x:0.5,y:0.5,tx:0.5,ty:0.5};
   var scrollY=0;
 
   function initStreaks(){
-    streaks=[]; var n=Math.round(Math.min(9, Math.max(4, W/220)));
+    streaks=[]; var n=Math.round(Math.min(9, Math.max(4, LW/220)));
     for(var i=0;i<n;i++) streaks.push(newStreak(true));
   }
   function newStreak(spread){
     var ang=-0.42+ (Math.random()-0.5)*0.16;                       // 往右上斜掠
-    return {x:Math.random()*W*(spread?1:0.2)-W*0.1, y:H*(0.15+Math.random()*0.8),
+    return {x:Math.random()*LW*(spread?1:0.2)-LW*0.1, y:LH*(0.15+Math.random()*0.8),
       sp:5.5+Math.random()*7, ang:ang, len:70+Math.random()*140,
       w:0.8+Math.random()*1.1, life:Math.random()};
   }
@@ -716,9 +716,12 @@
 
   function resize(){
     W=window.innerWidth; H=window.innerHeight;
+    // 手機捲動時網址列開合只改變高度，不重建場景（否則圖塊會用新亂數重排＝抖動）
+    if(W===LW && LH>0) return;
+    LW=W; LH=H;
     DPR=Math.min(window.devicePixelRatio||1, 2);
-    cv.width=W*DPR; cv.height=H*DPR;
-    cv.style.width=W+'px'; cv.style.height=H+'px';
+    cv.width=LW*DPR; cv.height=LH*DPR;
+    cv.style.width=LW+'px'; cv.style.height=LH+'px';
     ctx.setTransform(DPR,0,0,DPR,0,0);
 
     // 秩序的基底：規律方點網格
@@ -727,7 +730,7 @@
     tc.fillStyle='rgba(11,60,200,0.09)'; tc.fillRect(27,27,2,2);
     gridPat=ctx.createPattern(tile,'repeat');
 
-    var M=Math.min(W,H);
+    var M=Math.min(LW,LH);
     shapes=[];
     // 遠景：黃色閃電碎片（KV 斜切塊面）＋淡多邊形，低調鋪底
     addShape('shard', M*1.15,'y',{x:0.60,y:0.32,depth:0.22,alpha:0.15,blur:6, tilt:-0.52,bobA:10});
@@ -748,14 +751,14 @@
     shapes.sort(function(a,b){return a.depth-b.depth;});             // 遠→近
     initStreaks();
 
-    ctx.fillStyle='#FFFFFF'; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='#FFFFFF'; ctx.fillRect(0,0,LW,LH);
   }
 
   function drawStreaks(){
     for(var i=0;i<streaks.length;i++){
       var k=streaks[i];
       k.x+=Math.cos(k.ang)*k.sp; k.y+=Math.sin(k.ang)*k.sp; k.life+=0.01;
-      if(k.x>W+120||k.y<-120){ streaks[i]=newStreak(false); continue; }
+      if(k.x>LW+120||k.y<-120){ streaks[i]=newStreak(false); continue; }
       var tx=k.x-Math.cos(k.ang)*k.len, ty=k.y-Math.sin(k.ang)*k.len;
       var g=ctx.createLinearGradient(k.x,k.y,tx,ty);
       var a=0.5*(0.5+0.5*Math.sin(k.life*3));
@@ -775,8 +778,8 @@
     // Hero 讓位給 KV：捲動前背景幾何壓低，進入下方區塊才全強度
     cv.style.opacity=(0.30+Math.min(0.70, scrollY/520)).toFixed(3);
 
-    ctx.fillStyle='#FFFFFF'; ctx.fillRect(0,0,W,H);
-    if(gridPat){ ctx.fillStyle=gridPat; ctx.fillRect(0,0,W,H); }
+    ctx.fillStyle='#FFFFFF'; ctx.fillRect(0,0,LW,LH);
+    if(gridPat){ ctx.fillStyle=gridPat; ctx.fillRect(0,0,LW,LH); }
     if(!reduce) drawStreaks();
 
     for(var i=0;i<shapes.length;i++){
@@ -784,10 +787,10 @@
       var px=(mouse.x-0.5)*46*s.depth;
       var py=(mouse.y-0.5)*30*s.depth;
       var bob=Math.sin(t*0.0005+s.bobP)*s.bobA;
-      var span=H+s.spr.height;
-      var raw=s.y*H + bob + py - scrollY*0.10*s.depth;               // 捲動視差，超出畫面即循環
+      var span=LH+s.spr.height;
+      var raw=s.y*LH + bob + py - scrollY*0.10*s.depth;              // 捲動視差，超出畫面即循環
       var yy=((raw%span)+span)%span - s.spr.height/2;
-      var xx=s.x*W + px + Math.cos(t*0.0004+s.bobP)*s.bobA*0.5;
+      var xx=s.x*LW + px + Math.cos(t*0.0004+s.bobP)*s.bobA*0.5;
       var wob=(s.kind==='cube'||s.kind==='hex'||s.kind==='tri'||s.kind==='plus'||s.kind==='shard')
         ? s.tilt + Math.sin(t*0.00035+s.bobP)*0.05                   // 立體/碎片只輕微搖擺（可帶固定傾角）
         : s.rot;                                                     // 平面多邊形緩慢自轉
