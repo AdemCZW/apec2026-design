@@ -149,8 +149,22 @@
     transform:skewX(-18deg);pointer-events:none;}
   .navcta:hover::after{opacity:1;animation:shine .85s ease;}
   @keyframes shine{from{left:-60%;}to{left:120%;}}
-  .burger{display:none;background:none;border:1px solid var(--line-2);width:42px;height:38px;border-radius:2px;cursor:pointer;}
-  .burger span{display:block;width:18px;height:1.5px;background:var(--fg);margin:3.5px auto;transition:.3s;}
+  .drawer-tag,.drawer-cta{display:none;}
+  /* z-index 要贏過同為 nav 子層的抽屜(45)，否則 X 會被蓋住點不到 */
+  .burger{display:none;background:none;border:1px solid var(--line-2);width:42px;height:38px;border-radius:2px;cursor:pointer;
+    position:relative;z-index:47;transition:border-color .3s;}
+  .burger span{display:block;width:18px;height:1.5px;background:var(--fg);margin:3.5px auto;
+    transition:transform .4s cubic-bezier(.16,1,.3,1),opacity .25s;}
+  .burger.on{border-color:var(--blue);}
+  .burger.on span:nth-child(1){transform:translateY(5px) rotate(45deg);}
+  .burger.on span:nth-child(2){opacity:0;transform:scaleX(.3);}
+  .burger.on span:nth-child(3){transform:translateY(-5px) rotate(-45deg);}
+
+  /* 選單遮罩 */
+  .menu-scrim{position:fixed;inset:30px 0 0 0;z-index:44;pointer-events:none;
+    background:rgba(6,14,40,.34);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
+    opacity:0;transition:opacity .45s ease;}
+  .menu-scrim.on{opacity:1;pointer-events:auto;}
 
   /* ---------- SIDE RAIL ---------- */
   .rail{
@@ -314,12 +328,50 @@
     .spk-grid{grid-template-columns:repeat(2,1fr);}
   }
   @media(max-width:760px){
-    .navlinks,.navcta{display:none;}
+    .navcta{display:none;}
     .burger{display:block;}
-    .navlinks.open{display:flex;position:fixed;top:0;right:0;bottom:0;width:78%;max-width:320px;
-      flex-direction:column;align-items:flex-start;gap:8px;background:rgba(255,255,255,.97);backdrop-filter:blur(18px);
-      padding:90px 32px;border-left:1px solid var(--line);z-index:25;}
-    .navlinks.open a{font-size:16px;padding:10px 0;}
+    header.nav.menu-open{z-index:46;}                              /* 整條 nav 浮在遮罩之上 */
+    .brand{position:relative;z-index:47;}                          /* logo 留在抽屜之上 */
+
+    /* 側邊霧面玻璃抽屜：由右滑出，左緣羽化融入內容 */
+    .navlinks{
+      display:flex;flex-direction:column;align-items:stretch;gap:0;
+      position:fixed;top:30px;right:0;bottom:0;width:min(86vw,340px);z-index:45;
+      padding:78px 30px 36px;overflow-y:auto;
+      visibility:hidden;transform:translateX(100%);
+      transition:transform .55s cubic-bezier(.16,1,.3,1),visibility .55s;
+      backdrop-filter:blur(22px) saturate(1.3);-webkit-backdrop-filter:blur(22px) saturate(1.3);
+      background:linear-gradient(to left,rgba(255,255,255,.90) 0%,rgba(255,255,255,.86) 62%,rgba(255,255,255,.60) 100%);
+      border-left:1px solid rgba(11,76,240,.16);
+      box-shadow:-24px 0 60px rgba(11,60,200,.10);
+    }
+    .navlinks.open{visibility:visible;transform:none;}
+
+    .drawer-tag{display:inline-flex;align-items:center;gap:10px;
+      font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.24em;
+      text-transform:uppercase;color:var(--muted-2);padding-bottom:14px;
+      border-bottom:1px solid var(--line);margin-bottom:6px;}
+    .drawer-tag .dia{width:6px;height:6px;border:1px solid var(--blue);transform:rotate(45deg);}
+
+    /* 連結：逐項階梯進場（由上而下） */
+    .navlinks a{font-size:17px;padding:15px 0;border-bottom:1px solid var(--line);
+      opacity:0;transform:translateX(18px);
+      transition:opacity .5s ease,transform .5s cubic-bezier(.16,1,.3,1),color .25s;}
+    .navlinks.open a{opacity:1;transform:none;}
+    .navlinks.open a:nth-child(2){transition-delay:.10s;}
+    .navlinks.open a:nth-child(3){transition-delay:.16s;}
+    .navlinks.open a:nth-child(4){transition-delay:.22s;}
+    .navlinks.open a:nth-child(5){transition-delay:.28s;}
+    .navlinks.open a:nth-child(6){transition-delay:.34s;}
+    .navlinks.open a:nth-child(7){transition-delay:.42s;}
+    .navlinks a::after{display:none;}                              /* 抽屜用底線分隔，不要展開線 */
+
+    .drawer-cta{display:inline-flex;justify-content:center;align-items:center;
+      margin-top:26px;border:1px solid var(--blue);color:var(--blue);
+      font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.1em;
+      text-transform:uppercase;text-decoration:none;padding:14px 18px;border-radius:2px;
+      border-bottom:1px solid var(--blue)!important;}
+    .drawer-cta:active{background:var(--blue);color:#fff;}
     .concept-grid{grid-template-columns:1fr;}
     .stat-row{grid-template-columns:1fr;}
     .stat{border-top:1px solid var(--line);padding:18px 0;}
@@ -375,15 +427,18 @@
     </span>
   </a>
   <nav class="navlinks" id="navlinks">
+    <span class="drawer-tag" aria-hidden="true"><i class="dia"></i>Navigation · 05</span>
     <a href="#concept"><span class="ix">01</span>Concept</a>
     <a href="#about"><span class="ix">02</span>About</a>
     <a href="#agenda"><span class="ix">03</span>Agenda</a>
     <a href="#speakers"><span class="ix">04</span>Speakers</a>
     <a href="#venue"><span class="ix">05</span>Venue</a>
+    <a href="#venue" class="drawer-cta">Meet Venue ↗</a>
   </nav>
   <a href="#venue" class="navcta">Meet Venue ↗</a>
-  <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="navlinks"><span></span><span></span><span></span></button>
 </header>
+<div class="menu-scrim" id="menuScrim" aria-hidden="true"></div>
 
 <!-- SIDE RAIL -->
 <nav class="rail" id="rail">
@@ -946,10 +1001,21 @@
   function onScrollNav(){ if((window.pageYOffset||0)>40) nav.classList.add('scrolled'); else nav.classList.remove('scrolled'); }
   window.addEventListener('scroll',onScrollNav,{passive:true}); onScrollNav();
 
-  // burger
-  var burger=document.getElementById('burger'), navlinks=document.getElementById('navlinks');
-  burger.addEventListener('click',function(){navlinks.classList.toggle('open');});
-  navlinks.addEventListener('click',function(e){if(e.target.tagName==='A')navlinks.classList.remove('open');});
+  // burger / 側邊抽屜
+  var burger=document.getElementById('burger'), navlinks=document.getElementById('navlinks'),
+      scrim=document.getElementById('menuScrim');
+  function setMenu(open){
+    navlinks.classList.toggle('open',open);
+    burger.classList.toggle('on',open);
+    nav.classList.toggle('menu-open',open);
+    if(scrim) scrim.classList.toggle('on',open);
+    burger.setAttribute('aria-expanded',open?'true':'false');
+    document.body.style.overflow=open?'hidden':'';               // 開啟時鎖住背景捲動
+  }
+  burger.addEventListener('click',function(){ setMenu(!navlinks.classList.contains('open')); });
+  navlinks.addEventListener('click',function(e){ if(e.target.closest('a')) setMenu(false); });
+  if(scrim) scrim.addEventListener('click',function(){ setMenu(false); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') setMenu(false); });
 
   // reveal
   var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{threshold:0.12});
