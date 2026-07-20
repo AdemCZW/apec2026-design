@@ -202,7 +202,8 @@
 
   /* ---------- HERO ---------- */
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
-  .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-top:104px;padding-bottom:64px;position:relative;}
+  /* padding-bottom 需留給絕對定位的 .scrollcue，否則會被倒數壓到 */
+  .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-top:104px;padding-bottom:112px;position:relative;}
   .hero .full-name{max-width:560px;color:var(--muted);font-size:13px;line-height:1.7;margin-top:18px;font-family:"JetBrains Mono",monospace;letter-spacing:.02em;}
 
   /* KV 主視覺（核准正式稿）*/
@@ -218,6 +219,35 @@
   .meta .v{font-family:"Space Grotesk",sans-serif;font-size:clamp(1.05rem,1.7vw,1.35rem);margin-top:8px;color:var(--fg);font-weight:500;}
   .meta .v small{display:block;font-family:"Noto Sans TC",sans-serif;font-size:12.5px;color:var(--muted);font-weight:400;margin-top:3px;letter-spacing:.02em;}
   @keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+
+  /* ---------- 活動倒數 ---------- */
+  .countdown{margin-top:46px;padding-top:20px;border-top:1px solid var(--line);
+    opacity:0;animation:fadeUp .8s ease .65s forwards;}
+  .cd-head{display:flex;justify-content:space-between;align-items:baseline;gap:14px;
+    flex-wrap:wrap;margin-bottom:20px;}
+  .cd-eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.28em;
+    text-transform:uppercase;color:var(--cyan);display:inline-flex;align-items:center;gap:10px;}
+  .cd-eyebrow .dia{width:7px;height:7px;border:1px solid var(--cyan);transform:rotate(45deg);flex:none;}
+  .cd-when{font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.05em;color:var(--muted);}
+  .cd-grid{display:grid;grid-template-columns:repeat(4,1fr);}
+  .cd-cell{position:relative;padding:2px 22px 2px 0;border-right:1px solid var(--line);}
+  .cd-cell:last-child{border-right:none;}
+  .cd-num{font-family:"Space Grotesk",sans-serif;font-weight:700;line-height:.94;
+    font-size:clamp(2.5rem,6.4vw,4.4rem);letter-spacing:-.035em;color:var(--fg);
+    font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;}  /* 等寬數字：跳動時不位移 */
+  .cd-cell:first-child .cd-num{background:var(--glow);-webkit-background-clip:text;
+    background-clip:text;color:transparent;}                            /* 天數用品牌漸層強調 */
+  .cd-lab{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--muted);margin-top:12px;}
+  .cd-cell:last-child .cd-lab{color:var(--cyan);}
+  .cd-cell:last-child .cd-lab::after{content:"";display:inline-block;width:5px;height:5px;
+    margin-left:8px;border-radius:50%;background:var(--cyan);vertical-align:middle;
+    animation:blink 1s steps(1) infinite;}                              /* 秒數旁的心跳點 */
+  /* 活動進行中／已結束的狀態訊息 */
+  .cd-state{font-family:"Space Grotesk","Noto Sans TC",sans-serif;font-weight:600;
+    font-size:clamp(1.5rem,3.6vw,2.4rem);letter-spacing:-.02em;color:var(--fg);padding:4px 0 6px;}
+  .cd-state small{display:block;font-family:"JetBrains Mono",monospace;font-size:11.5px;
+    font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:12px;}
 
   .scrollcue{position:absolute;bottom:26px;left:var(--pad);display:flex;align-items:center;gap:12px;opacity:0;animation:fadeUp 1s ease 1s forwards;}
   .scrollcue .bar{width:1px;height:42px;background:linear-gradient(var(--cyan),transparent);position:relative;overflow:hidden;}
@@ -408,6 +438,11 @@
     .arow{grid-template-columns:1fr;gap:10px;}
     .arow .time{padding-left:18px;}
     .hero .meta-row{flex-direction:column;}
+    /* 倒數改 2×2，避免四欄擠在一起 */
+    .cd-grid{grid-template-columns:repeat(2,1fr);gap:24px 0;}
+    .cd-cell:nth-child(2n){border-right:none;}
+    .cd-cell{padding-right:16px;}
+    .cd-when{font-size:10.5px;}
     .hero .meta{border-right:none;border-bottom:1px solid var(--line);padding:18px 0;}
     .hero .meta:last-child{border-bottom:none;}
     .v-item{grid-template-columns:1fr;gap:6px;}
@@ -577,23 +612,21 @@
     <p class="zh">2026 APEC 透過 AI 技術驅動設計創新國際研討會</p>
     <p class="full-name">Driving Regional Industrial Design Innovation through AI Technology to Enhance MSMEs' Global Market Competitiveness.</p>
 
-    <div class="meta-row">
-      <div class="meta">
-        <div class="k">Date</div>
-        <div class="v">Sep 16 — 17, 2026<small>星期三 — 星期四</small></div>
+    <!-- 活動倒數（GMT+8 明確標時區，各地觀看都算得對）-->
+    <div class="countdown" id="countdown"
+         data-start="2026-09-16T09:30:00+08:00"
+         data-end="2026-09-17T16:40:00+08:00">
+      <div class="cd-head">
+        <span class="cd-eyebrow"><i class="dia"></i><span id="cdTitle">Countdown to Opening</span></span>
+        <span class="cd-when">2026.09.16 WED 09:30 (GMT+8) ・ 台灣設計研究院 創意劇場</span>
       </div>
-      <div class="meta">
-        <div class="k">Venue</div>
-        <div class="v">Creative Theater<small>台灣設計研究院 · Taipei</small></div>
+      <div class="cd-grid" id="cdGrid">
+        <div class="cd-cell"><div class="cd-num" id="cdD">--</div><div class="cd-lab">Days</div></div>
+        <div class="cd-cell"><div class="cd-num" id="cdH">--</div><div class="cd-lab">Hours</div></div>
+        <div class="cd-cell"><div class="cd-num" id="cdM">--</div><div class="cd-lab">Minutes</div></div>
+        <div class="cd-cell"><div class="cd-num" id="cdS">--</div><div class="cd-lab">Seconds</div></div>
       </div>
-      <div class="meta">
-        <div class="k">Format</div>
-        <div class="v">2-Day In-Person<small>研討會 ＋ 工作坊 ＋ 參訪</small></div>
-      </div>
-      <div class="meta">
-        <div class="k">Host</div>
-        <div class="v">TDRI<small>財團法人台灣設計研究院</small></div>
-      </div>
+      <div class="cd-state" id="cdState" hidden></div>
     </div>
   </div>
   <div class="scrollcue"><div class="bar"></div><span>Scroll to explore</span></div>
@@ -1132,6 +1165,36 @@
   // reveal
   var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{threshold:0.12});
   document.querySelectorAll('[data-reveal]').forEach(function(el){io.observe(el);});
+
+  /* ============ 活動倒數 ============ */
+  (function(){
+    var root=document.getElementById('countdown'); if(!root) return;
+    var start=new Date(root.dataset.start).getTime(),
+        end=new Date(root.dataset.end).getTime();
+    if(!isFinite(start)||!isFinite(end)) return;         // 日期解析失敗就不顯示壞掉的倒數
+    var grid=document.getElementById('cdGrid'), state=document.getElementById('cdState'),
+        title=document.getElementById('cdTitle'),
+        D=document.getElementById('cdD'), H=document.getElementById('cdH'),
+        M=document.getElementById('cdM'), S=document.getElementById('cdS');
+    function pad(n){ return (n<10?'0':'')+n; }
+    function show(msg,sub){                              // 進行中／已結束：換成訊息，不留負數
+      grid.hidden=true; state.hidden=false;
+      state.innerHTML=msg+'<small>'+sub+'</small>';
+    }
+    function tick(){
+      var now=Date.now();
+      if(now>=end){ show('活動圓滿結束','2026.09.16 — 09.17 · Taipei'); return true; }
+      if(now>=start){ show('活動進行中','Live now · 台灣設計研究院 創意劇場'); return true; }
+      var d=start-now, sec=Math.floor(d/1000);
+      D.textContent=Math.floor(sec/86400);               // 天數不補零，可能超過兩位數
+      H.textContent=pad(Math.floor(sec/3600)%24);
+      M.textContent=pad(Math.floor(sec/60)%60);
+      S.textContent=pad(sec%60);
+      if(title) title.textContent='Countdown to Opening';
+      return false;
+    }
+    if(!tick()){ var id=setInterval(function(){ if(tick()) clearInterval(id); },1000); }
+  })();
 
   /* ============ 文字解碼動畫（亂碼→解析）============ */
   var GLYPHS='ABCDEFGHJKLMNPQRSTUVWXYZ0123456789#%&/<>*+=';
