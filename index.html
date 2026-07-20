@@ -166,6 +166,27 @@
     opacity:0;transition:opacity .45s ease;}
   .menu-scrim.on{opacity:1;pointer-events:auto;}
 
+  /* App 內建瀏覽器提示（自動跳轉失敗時的退路） */
+  .iab-bar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:none;
+    padding:16px 18px calc(16px + env(safe-area-inset-bottom));
+    background:rgba(6,14,40,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-top:1px solid rgba(0,215,245,.35);color:#E8F4FF;
+    transform:translateY(100%);transition:transform .45s cubic-bezier(.16,1,.3,1);}
+  .iab-bar.show{display:block;}
+  .iab-bar.in{transform:none;}
+  .iab-bar .t{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:#00D7F5;display:flex;align-items:center;gap:9px;}
+  .iab-bar .t .dia{width:6px;height:6px;border:1px solid #00D7F5;transform:rotate(45deg);flex:none;}
+  .iab-bar p{font-family:"Noto Sans TC",sans-serif;font-size:13.5px;line-height:1.65;margin:8px 0 13px;color:#C6D8EE;}
+  .iab-bar .btns{display:flex;gap:9px;flex-wrap:wrap;}
+  .iab-bar button{flex:1 1 auto;min-width:120px;cursor:pointer;border-radius:2px;padding:12px 14px;
+    font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+    border:1px solid rgba(0,215,245,.5);background:transparent;color:#8FE3FF;transition:.25s;}
+  .iab-bar button.primary{background:#00D7F5;border-color:#00D7F5;color:#06122E;font-weight:600;}
+  .iab-bar button:active{opacity:.75;}
+  .iab-bar .x{position:absolute;top:10px;right:12px;min-width:0;flex:none;border:none;
+    background:none;color:#7E93B5;font-size:18px;padding:4px 8px;letter-spacing:0;}
+
   /* ---------- SIDE RAIL ---------- */
   .rail{
     position:fixed;left:26px;top:50%;transform:translateY(-50%);z-index:20;
@@ -401,6 +422,75 @@
 </head>
 <body>
 
+<!-- 從 LINE / 社群 App 內建瀏覽器開啟時，嘗試轉交系統瀏覽器 -->
+<script>
+(function(){
+  "use strict";
+  var ua=navigator.userAgent||'';
+  var isLine=/\bLine\//i.test(ua);
+  var isInApp=isLine||/FBAN|FBAV|FB_IAB|Instagram|MicroMessenger|KAKAOTALK|Snapchat|musical_ly|Bytedance|Barcelona/i.test(ua);
+  if(!isInApp) return;                                   // 一般瀏覽器：完全不介入
+
+  var isIOS=/iPhone|iPad|iPod/i.test(ua), isAndroid=/Android/i.test(ua);
+  var KEY='iabTried';
+
+  function cleanUrl(){                                   // 給使用者複製用，不帶內部參數
+    return location.href.replace(/([?&])openExternalBrowser=1&?/,'$1').replace(/[?&]$/,'');
+  }
+  function escapeToBrowser(manual){
+    try{
+      if(isLine){                                        // LINE 官方支援的參數
+        var u=new URL(location.href);
+        if(u.searchParams.get('openExternalBrowser')==='1'&&!manual) return;
+        u.searchParams.set('openExternalBrowser','1');
+        location.href=u.toString(); return;
+      }
+      if(isAndroid){                                     // Android intent：失敗會靜默無事
+        // 必須去掉原本的 #anchor：intent 用 "#Intent;" 當分隔，出現兩個 # 會解析失敗
+        var bare=location.href.split('#')[0].replace(/^https?:\/\//,'');
+        location.href='intent://'+bare+'#Intent;scheme=https;package=com.android.chrome;end'; return;
+      }
+      if(isIOS&&manual) location.href='x-safari-'+location.href;  // iOS 僅在使用者主動點擊時嘗試
+    }catch(e){}
+  }
+
+  // 自動嘗試一次。iOS 非 LINE 不自動跳（x-safari 可能跳出錯誤對話框），改用下方提示條
+  var tried=false; try{tried=sessionStorage.getItem(KEY)==='1';}catch(e){}
+  if(!tried){
+    try{sessionStorage.setItem(KEY,'1');}catch(e){}
+    if(isLine||isAndroid) escapeToBrowser(false);
+  }
+
+  // 1.5 秒後仍在本頁 → 代表自動跳轉沒成功，顯示手動退路
+  function arm(){
+    var bar=document.getElementById('iabBar'); if(!bar) return;
+    // 一律顯示：這是自動跳轉失敗時的唯一退路，不能有讓它不出現的條件。
+    // （原本用 document.hidden 判斷「是否已跳走」，但部分 webview 會誤報 hidden，
+    //   一旦誤報使用者就完全沒有手動出口。跳走的人本來就看不到，顯示了也無妨。）
+    setTimeout(function(){
+      bar.classList.add('show');
+      requestAnimationFrame(function(){bar.classList.add('in');});
+    },1500);
+    document.getElementById('iabOpen').addEventListener('click',function(){escapeToBrowser(true);});
+    document.getElementById('iabClose').addEventListener('click',function(){
+      bar.classList.remove('in'); setTimeout(function(){bar.classList.remove('show');},450);
+    });
+    document.getElementById('iabCopy').addEventListener('click',function(){
+      var btn=this,url=cleanUrl();
+      function ok(){btn.textContent='已複製 ✓';setTimeout(function(){btn.textContent='複製網址';},1800);}
+      function legacy(){
+        var ta=document.createElement('textarea');ta.value=url;
+        ta.style.cssText='position:fixed;top:0;opacity:0;';document.body.appendChild(ta);
+        ta.select();try{document.execCommand('copy');ok();}catch(e){}document.body.removeChild(ta);
+      }
+      if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(ok,legacy);
+      else legacy();
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',arm); else arm();
+})();
+</script>
+
 <canvas id="bg"></canvas>
 <div class="vignette"></div>
 <div class="grain"></div>
@@ -448,6 +538,17 @@
   <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="navlinks"><span></span><span></span><span></span></button>
 </header>
 <div class="menu-scrim" id="menuScrim" aria-hidden="true"></div>
+
+<!-- App 內建瀏覽器提示：自動跳轉失敗時的手動退路 -->
+<div class="iab-bar" id="iabBar" role="dialog" aria-live="polite">
+  <button class="x" id="iabClose" aria-label="關閉">×</button>
+  <div class="t"><i class="dia"></i>建議用瀏覽器開啟</div>
+  <p>你目前在 App 內建瀏覽器中，地圖與部分動態效果可能無法正常顯示。<br>也可點右上角 <b>⋯</b> 選擇「用預設瀏覽器開啟」。</p>
+  <div class="btns">
+    <button class="primary" id="iabOpen">開啟瀏覽器</button>
+    <button id="iabCopy">複製網址</button>
+  </div>
+</div>
 
 <!-- SIDE RAIL -->
 <nav class="rail" id="rail">
