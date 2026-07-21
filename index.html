@@ -37,7 +37,10 @@
     line-height:1.6;
     overflow-x:hidden;
     -webkit-font-smoothing:antialiased;
+    touch-action:manipulation;   /* 停用雙擊縮放（避免點擊突然放大局部），保留雙指縮放 */
   }
+  /* 可點元素也標記，行動裝置點擊更即時、不會誤觸放大 */
+  a,button,.tab,.arow,.concept,.spk{touch-action:manipulation;}
   ::selection{background:#F2F000;color:#06122E;}
 
   /* ---------- BACKGROUND CANVAS ---------- */
@@ -253,7 +256,9 @@
   .scrollcue span{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.24em;color:var(--muted);text-transform:uppercase;}
 
   /* ---------- SECTION SHELL ---------- */
-  section.block{padding:clamp(70px,11vh,140px) 0;position:relative;}
+  /* 用長寫 padding-top/bottom，別用 padding 簡寫——簡寫的 " 0" 會把左右歸零、
+     蓋掉 .wrap 的 var(--pad) 左右內縮，導致區塊在手機變滿版。 */
+  section.block{padding-top:clamp(70px,11vh,140px);padding-bottom:clamp(70px,11vh,140px);position:relative;}
   .sec-head{display:flex;align-items:baseline;gap:20px;margin-bottom:54px;flex-wrap:wrap;}
   .sec-ix{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--cyan);letter-spacing:.1em;}
   .sec-ix .tot{color:var(--muted-2);}
@@ -923,7 +928,9 @@
     W=window.innerWidth; H=window.innerHeight;
     // 手機捲動時網址列開合只改變高度，不重建場景（否則圖塊會用新亂數重排＝抖動）
     if(W===LW && LH>0) return;
-    LW=W; LH=H;
+    // 用「較大」的視窗高度：手機網址列收合後視窗會變高，若只用載入時(較短)的高度，
+    // 底部會露出一段沒有背景的白（使用者回報的長空白）。取較大值確保 canvas 蓋滿。
+    LW=W; LH=Math.max(H, (window.screen&&window.screen.height)||0);
     DPR=Math.min(window.devicePixelRatio||1, 2);
     cv.width=LW*DPR; cv.height=LH*DPR;
     cv.style.width=LW+'px'; cv.style.height=LH+'px';
