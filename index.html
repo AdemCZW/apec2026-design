@@ -121,6 +121,13 @@
     background:rgba(255,255,255,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
     border-bottom:1px solid var(--line);padding-top:13px;padding-bottom:13px;
   }
+  /* 手機版：nav 不可用 backdrop-filter——它會成為固定定位的容器，把身為子元素的
+     抽屜(position:fixed)困在小小的 nav 框裡，捲動後(nav 加 .scrolled)就塌掉。
+     改用不透明底維持捲動後的可讀性。桌機版抽屜是 static，不受影響，保留毛玻璃。 */
+  html.navmobile header.nav,html.navmobile header.nav.scrolled{
+    backdrop-filter:none;-webkit-backdrop-filter:none;
+  }
+  html.navmobile header.nav.scrolled{background:rgba(255,255,255,.93);}
   .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--fg);}
   .brand .mark{width:30px;height:30px;position:relative;flex:none;}
   .brand .mark svg{width:100%;height:100%;display:block;}
