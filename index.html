@@ -809,6 +809,9 @@
   var W=0,H=0,LW=0,LH=0,DPR=1, shapes=[], streaks=[], gridPat=null, t=0;
   var mouse={x:0.5,y:0.5,tx:0.5,ty:0.5};
   var scrollY=0;
+  // 各區塊背景濃度：文字密集的 about / agenda 大幅刷淡，避免浮動色塊吃到文字
+  var SECT_BG={concept:0.50, about:0.15, agenda:0.15, speakers:0.40, venue:0.30};
+  var activeSec=null, curBg=0.30;
 
   function initStreaks(){
     streaks=[]; var n=Math.round(Math.min(9, Math.max(4, LW/220)));
@@ -996,8 +999,11 @@
   function frame(){
     t+=16.6;
     mouse.x+=(mouse.tx-mouse.x)*0.05; mouse.y+=(mouse.ty-mouse.y)*0.05;
-    // Hero 讓位給 KV：捲動前背景幾何壓低，進入下方區塊才全強度
-    cv.style.opacity=(0.30+Math.min(0.70, scrollY/520)).toFixed(3);
+    // 背景濃度：Hero 讓位給 KV（依捲動漸強但設上限）；下方各區塊依 SECT_BG 調整，文字區刷淡
+    var scrollFade=0.30+Math.min(0.40, scrollY/520);
+    var target=(activeSec&&SECT_BG[activeSec]!=null)?SECT_BG[activeSec]:scrollFade;
+    curBg+=(target-curBg)*0.06;                          // 平滑過渡，切換區塊不會閃
+    cv.style.opacity=curBg.toFixed(3);
 
     ctx.fillStyle='#FFFFFF'; ctx.fillRect(0,0,LW,LH);
     if(gridPat){ ctx.fillStyle=gridPat; ctx.fillRect(0,0,LW,LH); }
@@ -1252,6 +1258,7 @@
     en.forEach(function(x){
       if(x.isIntersecting){
         var id=x.target.id;
+        activeSec=id;                                     // 驅動背景濃度（見 SECT_BG）
         document.querySelectorAll('.navlinks a').forEach(function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+id);});
         document.querySelectorAll('.rail a').forEach(function(a){a.classList.toggle('active',a.getAttribute('data-sec')===id);});
       }
