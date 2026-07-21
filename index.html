@@ -375,46 +375,47 @@
     .venue-grid{grid-template-columns:1fr;}
     .spk-grid{grid-template-columns:repeat(2,1fr);}
   }
+  /* ---- 手機導覽（漢堡＋側邊抽屜）----
+     用 html.navmobile 這個「類別」控制，而不是純 @media 寬度。JS 依 (max-width:760px)
+     設定這個類別，並在「選單打開時凍結」——這樣打開後不管視窗寬度怎麼跳動
+     （桌機經典捲軸在鎖捲動時消失造成的 ±15px、iOS 網址列開合等），抽屜都不會
+     被翻回桌機橫向 nav 而塌掉。這是「時好時壞」的根治。 */
+  html.navmobile .burger{display:block;}
+  html.navmobile header.nav.menu-open{z-index:46;}                /* 整條 nav 浮在遮罩之上 */
+  html.navmobile .brand{position:relative;z-index:47;}            /* logo 留在抽屜之上 */
+
+  /* 側邊抽屜：由右滑出。霧化背景直接放在 .navlinks 上（不是 ::before，否則內容一捲動
+     玻璃就跑掉）。背景夠不透明，就算 iOS 不套模糊，連結照樣看得到。連結不做
+     opacity/transform 進場動畫——那正是 iOS 在 backdrop-filter 容器內讓子層消失的觸發點。 */
+  html.navmobile .navlinks{
+    display:flex;flex-direction:column;align-items:stretch;gap:0;
+    position:fixed;top:30px;right:0;bottom:0;width:min(86vw,340px);z-index:45;
+    padding:74px 30px calc(30px + env(safe-area-inset-bottom));overflow-y:auto;
+    visibility:hidden;transform:translateX(100%);
+    transition:transform .5s cubic-bezier(.16,1,.3,1),visibility .5s;
+    background:linear-gradient(to left,rgba(255,255,255,.94) 0%,rgba(255,255,255,.90) 62%,rgba(255,255,255,.66) 100%);
+    backdrop-filter:blur(20px) saturate(1.3);-webkit-backdrop-filter:blur(20px) saturate(1.3);
+    border-left:1px solid rgba(11,76,240,.16);
+    box-shadow:-24px 0 60px rgba(11,60,200,.10);
+  }
+  html.navmobile .navlinks.open{visibility:visible;transform:none;}
+  html.navmobile .drawer-tag{display:inline-flex;align-items:center;gap:10px;
+    font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--muted-2);padding-bottom:14px;
+    border-bottom:1px solid var(--line);margin-bottom:6px;}
+  html.navmobile .drawer-tag .dia{width:6px;height:6px;border:1px solid var(--blue);transform:rotate(45deg);}
+  html.navmobile .navlinks a{font-size:17px;padding:16px 0;border-bottom:1px solid var(--line);}
+  html.navmobile .navlinks a::after{display:none;}                /* 抽屜用底線分隔，不要展開線 */
+
+  /* 純版面的響應式（不影響選單開關，維持 @media 依實際寬度即可）*/
   @media(max-width:760px){
-    .burger{display:block;}
-    header.nav.menu-open{z-index:46;}                              /* 整條 nav 浮在遮罩之上 */
-    .brand{position:relative;z-index:47;}                          /* logo 留在抽屜之上 */
-
-    /* 側邊抽屜：由右滑出。
-       霧化背景直接放在 .navlinks 上（不是 ::before，否則內容一捲動玻璃就跑掉，
-       露出下半部）。背景本身夠不透明，就算 iOS 不套 backdrop-filter 模糊，也只是
-       少了模糊、連結照樣看得到。連結不做 opacity/transform 進場動畫——那正是 iOS
-       Safari 在 backdrop-filter 容器內讓子層消失的觸發點。 */
-    .navlinks{
-      display:flex;flex-direction:column;align-items:stretch;gap:0;
-      position:fixed;top:30px;right:0;bottom:0;width:min(86vw,340px);z-index:45;
-      padding:74px 30px calc(30px + env(safe-area-inset-bottom));overflow-y:auto;
-      visibility:hidden;transform:translateX(100%);
-      transition:transform .5s cubic-bezier(.16,1,.3,1),visibility .5s;
-      background:linear-gradient(to left,rgba(255,255,255,.94) 0%,rgba(255,255,255,.90) 62%,rgba(255,255,255,.66) 100%);
-      backdrop-filter:blur(20px) saturate(1.3);-webkit-backdrop-filter:blur(20px) saturate(1.3);
-      border-left:1px solid rgba(11,76,240,.16);
-      box-shadow:-24px 0 60px rgba(11,60,200,.10);
-    }
-    .navlinks.open{visibility:visible;transform:none;}
-
-    .drawer-tag{display:inline-flex;align-items:center;gap:10px;
-      font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.24em;
-      text-transform:uppercase;color:var(--muted-2);padding-bottom:14px;
-      border-bottom:1px solid var(--line);margin-bottom:6px;}
-    .drawer-tag .dia{width:6px;height:6px;border:1px solid var(--blue);transform:rotate(45deg);}
-
-    .navlinks a{font-size:17px;padding:16px 0;border-bottom:1px solid var(--line);}
-    .navlinks a::after{display:none;}                              /* 抽屜用底線分隔，不要展開線 */
     .concept-grid{grid-template-columns:1fr;}
-    .stat-row{grid-template-columns:1fr;}
+    .stat-row{grid-template-columns:1fr;border-top:none;margin-top:30px;}
     .stat{border-top:1px solid var(--line);padding:18px 0;}
-    .stat-row{border-top:none;margin-top:30px;}
     .arow{grid-template-columns:1fr;gap:10px;}
     .arow .time{padding-left:18px;}
     .hero .meta-row{flex-direction:column;}
-    /* 倒數改 2×2，避免四欄擠在一起 */
-    .cd-grid{grid-template-columns:repeat(2,1fr);gap:24px 0;}
+    .cd-grid{grid-template-columns:repeat(2,1fr);gap:24px 0;}      /* 倒數 2×2 */
     .cd-cell:nth-child(2n){border-right:none;}
     .cd-cell{padding-right:16px;}
     .cd-when{font-size:10.5px;}
@@ -1120,6 +1121,19 @@
   // burger / 側邊抽屜
   var burger=document.getElementById('burger'), navlinks=document.getElementById('navlinks'),
       scrim=document.getElementById('menuScrim');
+
+  // 手機導覽模式：依寬度切 html.navmobile，但「打開時凍結」——
+  // 打開後即使寬度跳動（鎖捲動移除捲軸、iOS 網址列）也不會翻回桌機把抽屜弄塌。
+  var navMQ=window.matchMedia('(max-width:760px)'), htmlEl=document.documentElement;
+  function syncNavMode(){
+    if(navlinks.classList.contains('open')) return;              // 開啟中→凍結，不改
+    htmlEl.classList.toggle('navmobile', navMQ.matches);
+  }
+  syncNavMode();
+  if(navMQ.addEventListener) navMQ.addEventListener('change',syncNavMode);
+  else if(navMQ.addListener) navMQ.addListener(syncNavMode);      // 舊 Safari
+  window.addEventListener('resize',syncNavMode,{passive:true});
+
   function setMenu(open){
     navlinks.classList.toggle('open',open);
     burger.classList.toggle('on',open);
@@ -1127,6 +1141,7 @@
     if(scrim) scrim.classList.toggle('on',open);
     burger.setAttribute('aria-expanded',open?'true':'false');
     document.body.style.overflow=open?'hidden':'';               // 開啟時鎖住背景捲動
+    if(!open) syncNavMode();                                     // 關閉後才重新依寬度校正
   }
   burger.addEventListener('click',function(){ setMenu(!navlinks.classList.contains('open')); });
   navlinks.addEventListener('click',function(e){ if(e.target.closest('a')) setMenu(false); });
