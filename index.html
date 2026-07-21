@@ -378,18 +378,22 @@
     header.nav.menu-open{z-index:46;}                              /* 整條 nav 浮在遮罩之上 */
     .brand{position:relative;z-index:47;}                          /* logo 留在抽屜之上 */
 
-    /* 側邊霧面玻璃抽屜：由右滑出，左緣羽化融入內容 */
+    /* 側邊霧面玻璃抽屜：由右滑出，左緣羽化融入內容。
+       霧化背景放在 ::before 獨立圖層，讓連結不是 backdrop-filter 容器的子層——
+       否則 iOS Safari 會因合成問題讓連結整個消失（實機踩過的雷）。 */
     .navlinks{
       display:flex;flex-direction:column;align-items:stretch;gap:0;
       position:fixed;top:30px;right:0;bottom:0;width:min(86vw,340px);z-index:45;
-      padding:78px 30px 36px;overflow-y:auto;
-      visibility:hidden;transform:translateX(100%);
+      padding:78px 30px 36px;overflow-y:auto;isolation:isolate;
+      visibility:hidden;transform:translateX(100%);background:transparent;
       transition:transform .55s cubic-bezier(.16,1,.3,1),visibility .55s;
-      backdrop-filter:blur(22px) saturate(1.3);-webkit-backdrop-filter:blur(22px) saturate(1.3);
-      background:linear-gradient(to left,rgba(255,255,255,.90) 0%,rgba(255,255,255,.86) 62%,rgba(255,255,255,.60) 100%);
-      border-left:1px solid rgba(11,76,240,.16);
       box-shadow:-24px 0 60px rgba(11,60,200,.10);
     }
+    .navlinks::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+      backdrop-filter:blur(22px) saturate(1.3);-webkit-backdrop-filter:blur(22px) saturate(1.3);
+      background:linear-gradient(to left,rgba(255,255,255,.90) 0%,rgba(255,255,255,.86) 62%,rgba(255,255,255,.60) 100%);
+      border-left:1px solid rgba(11,76,240,.16);}
+    .navlinks > *{position:relative;z-index:1;}          /* 內容浮在霧化層之上 */
     .navlinks.open{visibility:visible;transform:none;}
 
     .drawer-tag{display:inline-flex;align-items:center;gap:10px;
@@ -591,7 +595,7 @@
     <span class="eyebrow lead"><i class="dia"></i>&nbsp;2026 APEC International Seminar · Taipei</span>
 
     <figure class="kv">
-      <img src="kv.webp" width="1920" height="1100"
+      <img src="kv-logos.webp" width="1517" height="872"
            alt="AI-Driven Design Innovation — 2026 APEC, Sep 16–17, 台灣設計研究院 創意劇場，藍黃玻璃質感 3D 幾何主視覺" />
     </figure>
 
