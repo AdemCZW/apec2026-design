@@ -27,7 +27,9 @@
   }
 
   *{box-sizing:border-box;margin:0;padding:0;}
-  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+  /* scrollbar-gutter:stable 永遠保留捲軸空間，讓選單鎖捲動(overflow:hidden)時
+     寬度不變——否則桌機經典捲軸消失會使寬度跨過 760 斷點、抽屜塌成橫向 nav */
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scrollbar-gutter:stable;}
   body{
     font-family:"Inter","Noto Sans TC",sans-serif;
     background:var(--ink);
