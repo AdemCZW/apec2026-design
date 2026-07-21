@@ -137,7 +137,7 @@
   .navlinks a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;
     background:var(--blue);transition:right .35s cubic-bezier(.16,1,.3,1);}
   .navlinks a:hover::after,.navlinks a.active::after{right:0;}
-  .drawer-tag,.drawer-cta{display:none;}
+  .drawer-tag{display:none;}
   /* z-index 要贏過同為 nav 子層的抽屜(45)，否則 X 會被蓋住點不到 */
   .burger{display:none;background:none;border:1px solid var(--line-2);width:42px;height:38px;border-radius:2px;cursor:pointer;
     position:relative;z-index:47;transition:border-color .3s;}
@@ -378,22 +378,22 @@
     header.nav.menu-open{z-index:46;}                              /* 整條 nav 浮在遮罩之上 */
     .brand{position:relative;z-index:47;}                          /* logo 留在抽屜之上 */
 
-    /* 側邊霧面玻璃抽屜：由右滑出，左緣羽化融入內容。
-       霧化背景放在 ::before 獨立圖層，讓連結不是 backdrop-filter 容器的子層——
-       否則 iOS Safari 會因合成問題讓連結整個消失（實機踩過的雷）。 */
+    /* 側邊抽屜：由右滑出。
+       霧化背景直接放在 .navlinks 上（不是 ::before，否則內容一捲動玻璃就跑掉，
+       露出下半部）。背景本身夠不透明，就算 iOS 不套 backdrop-filter 模糊，也只是
+       少了模糊、連結照樣看得到。連結不做 opacity/transform 進場動畫——那正是 iOS
+       Safari 在 backdrop-filter 容器內讓子層消失的觸發點。 */
     .navlinks{
       display:flex;flex-direction:column;align-items:stretch;gap:0;
       position:fixed;top:30px;right:0;bottom:0;width:min(86vw,340px);z-index:45;
-      padding:78px 30px 36px;overflow-y:auto;isolation:isolate;
-      visibility:hidden;transform:translateX(100%);background:transparent;
-      transition:transform .55s cubic-bezier(.16,1,.3,1),visibility .55s;
+      padding:74px 30px calc(30px + env(safe-area-inset-bottom));overflow-y:auto;
+      visibility:hidden;transform:translateX(100%);
+      transition:transform .5s cubic-bezier(.16,1,.3,1),visibility .5s;
+      background:linear-gradient(to left,rgba(255,255,255,.94) 0%,rgba(255,255,255,.90) 62%,rgba(255,255,255,.66) 100%);
+      backdrop-filter:blur(20px) saturate(1.3);-webkit-backdrop-filter:blur(20px) saturate(1.3);
+      border-left:1px solid rgba(11,76,240,.16);
       box-shadow:-24px 0 60px rgba(11,60,200,.10);
     }
-    .navlinks::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
-      backdrop-filter:blur(22px) saturate(1.3);-webkit-backdrop-filter:blur(22px) saturate(1.3);
-      background:linear-gradient(to left,rgba(255,255,255,.90) 0%,rgba(255,255,255,.86) 62%,rgba(255,255,255,.60) 100%);
-      border-left:1px solid rgba(11,76,240,.16);}
-    .navlinks > *{position:relative;z-index:1;}          /* 內容浮在霧化層之上 */
     .navlinks.open{visibility:visible;transform:none;}
 
     .drawer-tag{display:inline-flex;align-items:center;gap:10px;
@@ -402,26 +402,8 @@
       border-bottom:1px solid var(--line);margin-bottom:6px;}
     .drawer-tag .dia{width:6px;height:6px;border:1px solid var(--blue);transform:rotate(45deg);}
 
-    /* 連結：逐項階梯進場。預設就是可見，進場只靠 animation 疊上去——
-       萬一 animation 沒跑（舊瀏覽器 / iOS 對 backdrop-filter 容器內子層的合成問題），
-       連結仍然看得到，導覽不會消失。 */
-    .navlinks a{font-size:17px;padding:15px 0;border-bottom:1px solid var(--line);}
-    .navlinks.open a{animation:drawerIn .45s cubic-bezier(.16,1,.3,1) backwards;}
-    @keyframes drawerIn{from{opacity:0;transform:translateX(16px);}to{opacity:1;transform:none;}}
-    .navlinks.open a:nth-child(2){animation-delay:.06s;}
-    .navlinks.open a:nth-child(3){animation-delay:.10s;}
-    .navlinks.open a:nth-child(4){animation-delay:.14s;}
-    .navlinks.open a:nth-child(5){animation-delay:.18s;}
-    .navlinks.open a:nth-child(6){animation-delay:.22s;}
-    .navlinks.open a:nth-child(7){animation-delay:.28s;}
+    .navlinks a{font-size:17px;padding:16px 0;border-bottom:1px solid var(--line);}
     .navlinks a::after{display:none;}                              /* 抽屜用底線分隔，不要展開線 */
-
-    .drawer-cta{display:inline-flex;justify-content:center;align-items:center;
-      margin-top:26px;border:1px solid var(--blue);color:var(--blue);
-      font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.1em;
-      text-transform:uppercase;text-decoration:none;padding:14px 18px;border-radius:2px;
-      border-bottom:1px solid var(--blue)!important;}
-    .drawer-cta:active{background:var(--blue);color:#fff;}
     .concept-grid{grid-template-columns:1fr;}
     .stat-row{grid-template-columns:1fr;}
     .stat{border-top:1px solid var(--line);padding:18px 0;}
@@ -558,7 +540,6 @@
     <a href="#agenda"><span class="ix">03</span>Agenda</a>
     <a href="#speakers"><span class="ix">04</span>Speakers</a>
     <a href="#venue"><span class="ix">05</span>Venue</a>
-    <a href="#venue" class="drawer-cta">Meet Venue ↗</a>
   </nav>
   <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="navlinks"><span></span><span></span><span></span></button>
 </header>
