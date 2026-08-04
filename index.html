@@ -149,7 +149,8 @@
   .navlinks a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;
     background:var(--blue);transition:right .35s cubic-bezier(.16,1,.3,1);}
   .navlinks a:hover::after,.navlinks a.active::after{right:0;}
-  .drawer-tag{display:none;}
+  .drawer-tag,.drawer-reg{display:none;}                          /* 僅手機抽屜顯示 */
+  html.navmobile .drawer-reg{display:inline-flex;}
   /* z-index 要贏過同為 nav 子層的抽屜(45)，否則 X 會被蓋住點不到 */
   .burger{display:none;background:none;border:1px solid var(--line-2);width:42px;height:38px;border-radius:2px;cursor:pointer;
     position:relative;z-index:47;transition:border-color .3s;}
@@ -219,6 +220,23 @@
   .meta .v{font-family:"Space Grotesk",sans-serif;font-size:clamp(1.05rem,1.7vw,1.35rem);margin-top:8px;color:var(--fg);font-weight:500;}
   .meta .v small{display:block;font-family:"Noto Sans TC",sans-serif;font-size:12.5px;color:var(--muted);font-weight:400;margin-top:3px;letter-spacing:.02em;}
   @keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+
+  /* ---------- 報名 CTA ---------- */
+  .reg{margin-top:34px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+    opacity:0;animation:fadeUp .8s ease .8s forwards;}
+  .reg-btn{display:inline-flex;align-items:center;gap:12px;text-decoration:none;
+    background:var(--blue);color:#fff;border:1px solid var(--blue);border-radius:2px;
+    font-family:"JetBrains Mono",monospace;font-size:13px;letter-spacing:.12em;
+    text-transform:uppercase;padding:16px 26px;position:relative;overflow:hidden;
+    transition:background .25s,color .25s,transform .25s;}
+  .reg-btn:hover{background:#0A3CE0;transform:translateY(-1px);}
+  .reg-btn:active{transform:none;}
+  .reg-btn::after{content:"";position:absolute;top:0;left:-60%;width:38%;height:100%;opacity:0;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);
+    transform:skewX(-18deg);pointer-events:none;}
+  .reg-btn:hover::after{opacity:1;animation:regShine .8s ease;}
+  @keyframes regShine{from{left:-60%;}to{left:120%;}}
+  .reg-note{font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.04em;color:var(--muted);}
 
   /* ---------- 活動倒數 ---------- */
   .countdown{margin-top:46px;padding-top:20px;border-top:1px solid var(--line);
@@ -337,14 +355,24 @@
   .arow.brk .sess{color:var(--muted);font-weight:400;font-style:italic;}
 
   /* ---------- SPEAKERS ---------- */
-  .spk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
-  .spk{background:var(--ink);padding:30px 24px 28px;aspect-ratio:1/1.18;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;transition:background .4s;}
+  .spk-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  .spk{background:var(--ink);margin:0;padding:0 0 22px;display:flex;flex-direction:column;
+    position:relative;overflow:hidden;transition:background .4s;}
   .spk:hover{background:var(--ink-2);}
-  .spk .scv{position:absolute;inset:0;width:100%;height:100%;opacity:.55;}
-  .spk .top{position:relative;z-index:2;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.12em;color:var(--muted-2);}
-  .spk .bot{position:relative;z-index:2;}
-  .spk .bot .tba{font-family:"Space Grotesk",sans-serif;font-size:1.15rem;font-weight:500;color:var(--fg);}
-  .spk .bot .role{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.08em;color:var(--cyan);margin-top:6px;text-transform:uppercase;}
+  /* height:auto 必要——否則 HTML 的 height 屬性會壓過 aspect-ratio，各卡圖高不一 */
+  .spk img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;
+    filter:saturate(.96);transition:transform .5s cubic-bezier(.16,1,.3,1);}
+  .spk:hover img{transform:scale(1.035);}
+  .spk figcaption{padding:16px 20px 0;display:flex;flex-direction:column;}
+  .spk .ix{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.16em;color:var(--muted-2);}
+  .spk b{font-family:"Space Grotesk","Noto Sans TC",sans-serif;font-size:1.02rem;font-weight:600;
+    color:var(--fg);margin-top:7px;line-height:1.25;letter-spacing:-.01em;}
+  .spk b em{font-style:normal;font-family:"JetBrains Mono",monospace;font-size:9.5px;
+    letter-spacing:.1em;color:var(--blue);border:1px solid var(--line-2);
+    padding:1px 5px;margin-left:7px;vertical-align:middle;}
+  .spk .role{font-size:12px;line-height:1.5;color:var(--muted);margin-top:8px;}
+  .spk .org{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.03em;
+    color:var(--blue);margin-top:6px;line-height:1.45;}
   .spk-note{margin-top:24px;font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--muted);letter-spacing:.04em;display:flex;align-items:center;gap:10px;}
   .spk-note .blink{width:7px;height:7px;background:var(--blue);border-radius:50%;animation:blink 1.6s ease-in-out infinite;}
   @keyframes blink{0%,100%{opacity:1;}50%{opacity:.25;}}
@@ -385,8 +413,9 @@
     .rail{display:none;}
     .about-grid{grid-template-columns:1fr;}
     .venue-grid{grid-template-columns:1fr;}
-    .spk-grid{grid-template-columns:repeat(2,1fr);}
+    .spk-grid{grid-template-columns:repeat(3,1fr);}
   }
+  @media(max-width:620px){ .spk-grid{grid-template-columns:repeat(2,1fr);} }
   /* ---- 手機導覽（漢堡＋側邊抽屜）----
      用 html.navmobile 這個「類別」控制，而不是純 @media 寬度。JS 依 (max-width:760px)
      設定這個類別，並在「選單打開時凍結」——這樣打開後不管視窗寬度怎麼跳動
@@ -418,6 +447,9 @@
   html.navmobile .drawer-tag .dia{width:6px;height:6px;border:1px solid var(--blue);transform:rotate(45deg);}
   html.navmobile .navlinks a{font-size:17px;padding:16px 0;border-bottom:1px solid var(--line);}
   html.navmobile .navlinks a::after{display:none;}                /* 抽屜用底線分隔，不要展開線 */
+  html.navmobile .drawer-reg{margin-top:22px;background:var(--blue);color:#fff;border:none!important;
+    text-align:center;justify-content:center;border-radius:2px;font-family:"JetBrains Mono",monospace;
+    font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:16px 18px!important;}
 
   /* 純版面的響應式（不影響選單開關，維持 @media 依實際寬度即可）*/
   @media(max-width:760px){
@@ -555,6 +587,7 @@
     <a href="#agenda"><span class="ix">03</span>Agenda</a>
     <a href="#speakers"><span class="ix">04</span>Speakers</a>
     <a href="#venue"><span class="ix">05</span>Venue</a>
+    <a class="drawer-reg" href="https://tdri.surveycake.biz/s/wepMM" target="_blank" rel="noopener">立即報名 Register ↗</a>
   </nav>
   <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="navlinks"><span></span><span></span><span></span></button>
 </header>
@@ -613,6 +646,13 @@
         <div class="cd-cell"><div class="cd-num" id="cdS">--</div><div class="cd-lab">Seconds</div></div>
       </div>
       <div class="cd-state" id="cdState" hidden></div>
+    </div>
+
+    <div class="reg">
+      <a class="reg-btn" href="https://tdri.surveycake.biz/s/wepMM" target="_blank" rel="noopener">
+        立即報名 Register<span aria-hidden="true">↗</span>
+      </a>
+      <span class="reg-note">報名截止 Aug 14, 2026 ・ 需事先完成線上報名</span>
     </div>
   </div>
   <div class="scrollcue"><div class="bar"></div><span>Scroll to explore</span></div>
@@ -714,15 +754,61 @@
   <div class="sec-head" data-reveal>
     <span class="sec-ix">04<span class="tot"> / 05</span></span>
     <h2 class="sec-title">Speakers</h2>
-    <p class="sec-sub">A line-up of design, technology and policy leaders from across the APEC region — to be revealed.</p>
+    <p class="sec-sub">Design, technology and policy leaders from across the APEC region.</p>
   </div>
   <div class="spk-grid" data-reveal>
-    <div class="spk"><canvas class="scv" data-spk="0"></canvas><div class="top">SPK / 01</div><div class="bot"><div class="tba">To be announced</div><div class="role">Keynote</div></div></div>
-    <div class="spk"><canvas class="scv" data-spk="1"></canvas><div class="top">SPK / 02</div><div class="bot"><div class="tba">To be announced</div><div class="role">AI · Design</div></div></div>
-    <div class="spk"><canvas class="scv" data-spk="2"></canvas><div class="top">SPK / 03</div><div class="bot"><div class="tba">To be announced</div><div class="role">Industry</div></div></div>
-    <div class="spk"><canvas class="scv" data-spk="3"></canvas><div class="top">SPK / 04</div><div class="bot"><div class="tba">To be announced</div><div class="role">Policy</div></div></div>
+    <figure class="spk">
+      <img src="speakers/01-anne-asensio.webp" alt="Anne Asensio" width="440" height="440" loading="lazy">
+      <figcaption><span class="ix">SPK / 01</span><b>Anne Asensio<em>FR</em></b>
+        <span class="role">Vice President, Design Innovation</span><span class="org">Dassault Systèmes</span></figcaption>
+    </figure>
+    <figure class="spk">
+      <img src="speakers/02-tachikawa.webp" alt="太刀川英輔 Eisuke Tachikawa" width="199" height="199" loading="lazy">
+      <figcaption><span class="ix">SPK / 02</span><b>太刀川英輔<em>JP</em></b>
+        <span class="role">Founder &amp; CEO</span><span class="org">NOSIGNER</span></figcaption>
+    </figure>
+    <figure class="spk">
+      <img src="speakers/03-chang-wenying.webp" alt="張文櫻" width="440" height="440" loading="lazy">
+      <figcaption><span class="ix">SPK / 03</span><b>張文櫻</b>
+        <span class="role">Vice President, Research &amp; Development</span><span class="org">台灣設計研究院 TDRI</span></figcaption>
+    </figure>
+    <figure class="spk">
+      <img src="speakers/04-chen-shikuan.webp" alt="陳禧冠 Shi-kuan Chen" width="204" height="204" loading="lazy">
+      <figcaption><span class="ix">SPK / 04</span><b>陳禧冠</b>
+        <span class="role">Senior VP &amp; Chief Design Officer</span><span class="org">仁寶電腦 Compal Electronics</span></figcaption>
+    </figure>
+    <figure class="spk">
+      <img src="speakers/05-hu-jwusheng.webp" alt="胡竹生 Dr. Jwu-Sheng Hu" width="200" height="200" loading="lazy">
+      <figcaption><span class="ix">SPK / 05</span><b>胡竹生</b>
+        <span class="role">Executive Vice President</span><span class="org">工業技術研究院 ITRI</span></figcaption>
+    </figure>
+    <figure class="spk">
+      <img src="speakers/06-chou-vanessa.webp" alt="周嗣萱 Vanessa Chou" width="400" height="400" loading="lazy">
+      <figcaption><span class="ix">SPK / 06</span><b>周嗣萱</b>
+        <span class="role">Executive Assistant to the CEO</span><span class="org">聚陽實業 Makalot Industrial</span></figcaption>
+    </figure>
+    <figure class="spk">
+      <img src="speakers/07-ken-nah.webp" alt="Ken Nah" width="209" height="209" loading="lazy">
+      <figcaption><span class="ix">SPK / 07</span><b>Ken Nah<em>KR</em></b>
+        <span class="role">Master Designer</span><span class="org">Busan City 釜山市</span></figcaption>
+    </figure>
+    <figure class="spk">
+      <img src="speakers/08-asanuma.webp" alt="淺沼尚 ASANUMA Takashi" width="440" height="440" loading="lazy">
+      <figcaption><span class="ix">SPK / 08</span><b>淺沼 尚<em>JP</em></b>
+        <span class="role">Consultant, Digital Agency ／ Executive Advisor</span><span class="org">Government of Japan ／ GovTech Tokyo</span></figcaption>
+    </figure>
+    <figure class="spk">
+      <img src="speakers/09-waritthi.webp" alt="Waritthi Teeraprasert" width="440" height="440" loading="lazy">
+      <figcaption><span class="ix">SPK / 09</span><b>Waritthi Teeraprasert<em>TH</em></b>
+        <span class="role">Acting Director, Business &amp; Innovation Development</span><span class="org">Creative Economy Agency</span></figcaption>
+    </figure>
+    <figure class="spk">
+      <img src="speakers/10-hua-kailung.webp" alt="花凱龍 Dr. Kai-Lung Hua" width="211" height="211" loading="lazy">
+      <figcaption><span class="ix">SPK / 10</span><b>花凱龍</b>
+        <span class="role">Chief Technology Officer</span><span class="org">台灣微軟 Microsoft Chinese Taipei</span></figcaption>
+    </figure>
   </div>
-  <div class="spk-note"><i class="blink"></i>Speaker profiles will be published closer to the event date.</div>
+  <div class="spk-note"><i class="blink"></i>Speaker line-up as of Aug 2026; the organizer reserves the right to adjust the programme.</div>
 </section>
 
 <!-- VENUE -->
@@ -1081,31 +1167,6 @@
     window.addEventListener('resize',rs);
   }
 
-  /* ============ SPEAKER CARD CANVASES ============ */
-  function spkSetup(canvas, seed){
-    var c=canvas.getContext('2d'),w,h,dpr,tt=seed*100;
-    function rs(){w=canvas.clientWidth;h=canvas.clientHeight;dpr=Math.min(window.devicePixelRatio||1,2);
-      canvas.width=w*dpr;canvas.height=h*dpr;c.setTransform(dpr,0,0,dpr,0,0);}
-    function draw(){
-      if(!w||!h){ rs(); if(!reduce) requestAnimationFrame(draw); return; }
-      tt+=16.6; c.clearRect(0,0,w,h);
-      var cx=w/2, cy=h*0.42, R=Math.min(w,h)*0.26, sides=6;
-      var col=STOPS[seed%3], rot=tt*0.0003+seed;
-      var breath=1+Math.sin(tt*0.0008+seed)*0.08, decon=4+Math.sin(tt*0.0005+seed)*4;
-      var v=[];
-      for(var i=0;i<sides;i++){var a=(i/sides)*6.2832; var rx=Math.cos(a)*R*breath, ry=Math.sin(a)*R*breath;
-        var rrx=rx*Math.cos(rot)-ry*Math.sin(rot), rry=rx*Math.sin(rot)+ry*Math.cos(rot);
-        var len=Math.sqrt(rrx*rrx+rry*rry)||1; v.push([cx+rrx+(rrx/len)*decon, cy+rry+(rry/len)*decon]);}
-      c.lineWidth=1;
-      for(var i=0;i<sides;i++){var a=v[i],b=v[(i+1)%sides];
-        c.strokeStyle=rgba(col,0.5);c.beginPath();c.moveTo(a[0],a[1]);c.lineTo(b[0],b[1]);c.stroke();
-        c.strokeStyle=rgba(col,0.12);c.beginPath();c.moveTo(a[0],a[1]);c.lineTo(cx,cy);c.stroke();}
-      for(var i=0;i<sides;i++){c.fillStyle=rgba(col,0.85);c.beginPath();c.arc(v[i][0],v[i][1],1.5,0,6.3);c.fill();}
-      if(!reduce) requestAnimationFrame(draw);
-    }
-    rs();draw();window.addEventListener('resize',rs);
-  }
-
   /* ============ INTERACTIONS ============ */
   // 十字準星＋座標讀數
   var axis=document.getElementById('axis'),
@@ -1291,7 +1352,6 @@
   window.addEventListener('resize',resize);
   if(reduce){ frame(); } else { requestAnimationFrame(frame); }
   document.querySelectorAll('[data-mini]').forEach(function(cv){miniSetup(cv,cv.getAttribute('data-mini'));});
-  document.querySelectorAll('[data-spk]').forEach(function(cv){spkSetup(cv,parseInt(cv.getAttribute('data-spk'),10));});
 })();
 </script>
 </body>
