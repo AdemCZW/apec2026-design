@@ -149,8 +149,7 @@
   .navlinks a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;
     background:var(--blue);transition:right .35s cubic-bezier(.16,1,.3,1);}
   .navlinks a:hover::after,.navlinks a.active::after{right:0;}
-  .drawer-tag,.drawer-reg{display:none;}                          /* 僅手機抽屜顯示 */
-  html.navmobile .drawer-reg{display:inline-flex;}
+  .drawer-tag{display:none;}                                      /* 僅手機抽屜顯示 */
   /* z-index 要贏過同為 nav 子層的抽屜(45)，否則 X 會被蓋住點不到 */
   .burger{display:none;background:none;border:1px solid var(--line-2);width:42px;height:38px;border-radius:2px;cursor:pointer;
     position:relative;z-index:47;transition:border-color .3s;}
@@ -487,9 +486,6 @@
   html.navmobile .drawer-tag .dia{width:6px;height:6px;border:1px solid var(--blue);transform:rotate(45deg);}
   html.navmobile .navlinks a{font-size:17px;padding:16px 0;border-bottom:1px solid var(--line);}
   html.navmobile .navlinks a::after{display:none;}                /* 抽屜用底線分隔，不要展開線 */
-  html.navmobile .drawer-reg{margin-top:22px;background:var(--blue);color:#fff;border:none!important;
-    text-align:center;justify-content:center;border-radius:2px;font-family:"JetBrains Mono",monospace;
-    font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:16px 18px!important;}
 
   /* 純版面的響應式（不影響選單開關，維持 @media 依實際寬度即可）*/
   @media(max-width:760px){
@@ -629,7 +625,6 @@
     <a href="#agenda"><span class="ix">03</span>Agenda</a>
     <a href="#speakers"><span class="ix">04</span>Speakers</a>
     <a href="#venue"><span class="ix">05</span>Venue</a>
-    <a class="drawer-reg" href="https://tdri.surveycake.biz/s/wepMM" target="_blank" rel="noopener">立即報名 Register ↗</a>
   </nav>
   <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="navlinks"><span></span><span></span><span></span></button>
 </header>
