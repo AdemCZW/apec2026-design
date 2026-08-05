@@ -238,6 +238,46 @@
   @keyframes regShine{from{left:-60%;}to{left:120%;}}
   .reg-note{font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.04em;color:var(--muted);}
 
+  /* ---------- 固定底部報名列 ----------
+     z-index 42：在內容之上，但低於選單遮罩(44)/抽屜(45)/App 提示條(60)。
+     選單開啟或 App 提示條出現時自動收起，避免互相遮擋。 */
+  .sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:42;
+    padding:12px var(--pad) calc(12px + env(safe-area-inset-bottom));
+    background:rgba(255,255,255,.93);
+    backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);
+    border-top:1px solid var(--line-2);box-shadow:0 -12px 40px rgba(11,60,200,.08);
+    transition:transform .45s cubic-bezier(.16,1,.3,1);}
+  html.menu-open .sticky-cta,html.iab-open .sticky-cta{transform:translateY(110%);}
+  .sc-inner{max-width:var(--maxw);margin:0 auto;display:flex;align-items:center;
+    justify-content:space-between;gap:20px;}
+  .sc-info{display:flex;flex-direction:column;gap:5px;min-width:0;}
+  .sc-dl{font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--blue);display:inline-flex;align-items:center;gap:9px;}
+  .sc-dl .dia{width:6px;height:6px;border:1px solid var(--blue);transform:rotate(45deg);flex:none;}
+  .sc-when{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.03em;color:var(--muted);}
+  .sc-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;flex:none;
+    text-decoration:none;background:var(--blue);color:#fff;border:1px solid var(--blue);border-radius:2px;
+    font-family:"JetBrains Mono",monospace;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;
+    padding:15px 28px;position:relative;overflow:hidden;transition:background .25s,transform .2s;}
+  .sc-btn:hover{background:#0A3CE0;transform:translateY(-1px);}
+  .sc-btn:active{transform:none;}
+  .sc-btn::after{content:"";position:absolute;top:0;left:-60%;width:38%;height:100%;opacity:0;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);
+    transform:skewX(-18deg);pointer-events:none;}
+  .sc-btn:hover::after{opacity:1;animation:regShine .8s ease;}
+  /* 手機：資訊收成一行、按鈕撐開，避免擠壓 */
+  @media(max-width:620px){
+    .sticky-cta{padding:10px 16px calc(10px + env(safe-area-inset-bottom));}
+    .sc-inner{gap:12px;}
+    .sc-when{display:none;}
+    .sc-dl{font-size:10px;letter-spacing:.08em;}
+    .sc-btn{flex:1 1 auto;padding:14px 16px;font-size:11.5px;letter-spacing:.08em;}
+  }
+  @media(max-width:380px){
+    .sc-info{display:none;}                                       /* 極窄：只留按鈕 */
+    .sc-btn{width:100%;}
+  }
+
   /* ---------- 活動倒數 ---------- */
   .countdown{margin-top:46px;padding-top:20px;border-top:1px solid var(--line);
     opacity:0;animation:fadeUp .8s ease .65s forwards;}
@@ -267,7 +307,7 @@
   .cd-state small{display:block;font-family:"JetBrains Mono",monospace;font-size:11.5px;
     font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:12px;}
 
-  .scrollcue{position:absolute;bottom:26px;left:var(--pad);display:flex;align-items:center;gap:12px;opacity:0;animation:fadeUp 1s ease 1s forwards;}
+  .scrollcue{position:absolute;bottom:calc(26px + var(--sticky-h,0px));left:var(--pad);display:flex;align-items:center;gap:12px;opacity:0;animation:fadeUp 1s ease 1s forwards;}
   .scrollcue .bar{width:1px;height:42px;background:linear-gradient(var(--cyan),transparent);position:relative;overflow:hidden;}
   .scrollcue .bar::after{content:"";position:absolute;top:-50%;left:0;width:100%;height:50%;background:var(--cyan);animation:drop 2.2s ease-in-out infinite;}
   @keyframes drop{0%{top:-50%;}60%,100%{top:100%;}}
@@ -524,11 +564,13 @@
     //   一旦誤報使用者就完全沒有手動出口。跳走的人本來就看不到，顯示了也無妨。）
     setTimeout(function(){
       bar.classList.add('show');
+      document.documentElement.classList.add('iab-open');         // 收起底部報名列，避免兩條疊在一起
       requestAnimationFrame(function(){bar.classList.add('in');});
     },1500);
     document.getElementById('iabOpen').addEventListener('click',function(){escapeToBrowser(true);});
     document.getElementById('iabClose').addEventListener('click',function(){
       bar.classList.remove('in'); setTimeout(function(){bar.classList.remove('show');},450);
+      document.documentElement.classList.remove('iab-open');      // 關閉提示後恢復報名列
     });
     document.getElementById('iabCopy').addEventListener('click',function(){
       var btn=this,url=cleanUrl();
@@ -592,6 +634,19 @@
   <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="navlinks"><span></span><span></span><span></span></button>
 </header>
 <div class="menu-scrim" id="menuScrim" aria-hidden="true"></div>
+
+<!-- 固定在螢幕底部的報名列 -->
+<div class="sticky-cta" id="stickyCta">
+  <div class="sc-inner">
+    <div class="sc-info">
+      <span class="sc-dl"><i class="dia"></i>報名截止 Aug 14, 2026</span>
+      <span class="sc-when">2026.09.16 WED 09:30 (GMT+8) ・ 創意劇場</span>
+    </div>
+    <a class="sc-btn" href="https://tdri.surveycake.biz/s/wepMM" target="_blank" rel="noopener">
+      立即報名 Register<span aria-hidden="true">↗</span>
+    </a>
+  </div>
+</div>
 
 <!-- App 內建瀏覽器提示：自動跳轉失敗時的手動退路 -->
 <div class="iab-bar" id="iabBar" role="dialog" aria-live="polite">
@@ -1209,10 +1264,23 @@
   else if(navMQ.addListener) navMQ.addListener(syncNavMode);      // 舊 Safari
   window.addEventListener('resize',syncNavMode,{passive:true});
 
+  // 固定底部報名列：量測實際高度，讓頁尾不被蓋住、scrollcue 也往上讓位
+  var stickyCta=document.getElementById('stickyCta');
+  function fitSticky(){
+    if(!stickyCta) return;
+    var h=stickyCta.offsetHeight||0;
+    htmlEl.style.setProperty('--sticky-h',h+'px');
+    document.body.style.paddingBottom=h+'px';
+  }
+  fitSticky();
+  window.addEventListener('resize',fitSticky,{passive:true});
+  window.addEventListener('load',fitSticky);
+
   function setMenu(open){
     navlinks.classList.toggle('open',open);
     burger.classList.toggle('on',open);
     nav.classList.toggle('menu-open',open);
+    htmlEl.classList.toggle('menu-open',open);                   // 收起底部報名列
     if(scrim) scrim.classList.toggle('on',open);
     burger.setAttribute('aria-expanded',open?'true':'false');
     document.body.style.overflow=open?'hidden':'';               // 開啟時鎖住背景捲動
