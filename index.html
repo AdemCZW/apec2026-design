@@ -221,44 +221,47 @@
 
   @keyframes regShine{from{left:-60%;}to{left:120%;}}             /* 底部報名列按鈕的掃光 */
 
-  /* ---------- 固定底部報名列 ----------
-     z-index 42：在內容之上，但低於選單遮罩(44)/抽屜(45)/App 提示條(60)。
-     選單開啟或 App 提示條出現時自動收起，避免互相遮擋。 */
-  .sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:42;
-    padding:12px var(--pad) calc(12px + env(safe-area-inset-bottom));
-    background:rgba(255,255,255,.93);
-    backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);
-    border-top:1px solid var(--line-2);box-shadow:0 -12px 40px rgba(11,60,200,.08);
-    transition:transform .45s cubic-bezier(.16,1,.3,1);}
-  html.menu-open .sticky-cta,html.iab-open .sticky-cta{transform:translateY(110%);}
-  .sc-inner{max-width:var(--maxw);margin:0 auto;display:flex;align-items:center;
-    justify-content:space-between;gap:20px;}
-  .sc-info{display:flex;flex-direction:column;gap:5px;min-width:0;}
-  .sc-dl{font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.14em;
-    text-transform:uppercase;color:var(--blue);display:inline-flex;align-items:center;gap:9px;}
-  .sc-dl .dia{width:6px;height:6px;border:1px solid var(--blue);transform:rotate(45deg);flex:none;}
-  .sc-when{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.03em;color:var(--muted);}
-  .sc-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;flex:none;
-    text-decoration:none;background:var(--blue);color:#fff;border:1px solid var(--blue);border-radius:2px;
-    font-family:"JetBrains Mono",monospace;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;
-    padding:15px 28px;position:relative;overflow:hidden;transition:background .25s,transform .2s;}
-  .sc-btn:hover{background:#0A3CE0;transform:translateY(-1px);}
-  .sc-btn:active{transform:none;}
-  .sc-btn::after{content:"";position:absolute;top:0;left:-60%;width:38%;height:100%;opacity:0;
-    background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);
+  /* ---------- 右下角浮動報名鈕 ----------
+     不規則多邊形（clip-path），呼應 KV 的切面幾何語言。
+     z-index 42：在內容之上，但低於選單遮罩(44)/抽屜(45)/App 提示條(60)；
+     選單開啟或 App 提示條出現時收起，避免互相遮擋。
+     陰影放在外層 wrap 用 drop-shadow——clip-path 會把 box-shadow 一起裁掉。 */
+  /* 貼齊畫面右下 90° 直角：外側兩邊切齊螢幕，內側為不規則斜切面 */
+  .fab-wrap{position:fixed;right:0;bottom:0;z-index:42;
+    filter:drop-shadow(-6px -6px 22px rgba(11,60,200,.26));
+    transition:transform .45s cubic-bezier(.16,1,.3,1),opacity .3s;}
+  html.menu-open .fab-wrap,html.iab-open .fab-wrap{
+    transform:translate(30%,60%);opacity:0;pointer-events:none;}
+  .fab{display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;gap:4px;
+    width:clamp(132px,15vw,168px);height:clamp(104px,11.5vw,132px);
+    padding:0 clamp(14px,1.4vw,20px) calc(clamp(14px,1.4vw,18px) + env(safe-area-inset-bottom)) 0;
+    text-decoration:none;color:#fff;text-align:right;
+    background:linear-gradient(150deg,#1560FF 0%,#0B4CF0 48%,#0A38D6 100%);
+    /* 右、下兩邊 100% 貼齊直角；左上為不規則折線 */
+    clip-path:polygon(46% 0%,100% 0%,100% 100%,0% 100%,7% 58%,26% 22%);
+    position:relative;overflow:hidden;
+    transition:transform .35s cubic-bezier(.16,1,.3,1);}
+  .fab:hover{transform:scale(1.04);}
+  .fab:active{transform:scale(.99);}
+  .fab-zh{font-family:"Noto Sans TC",sans-serif;font-weight:700;font-size:clamp(14px,1.5vw,16.5px);
+    letter-spacing:.05em;line-height:1.1;}
+  .fab-en{font-family:"JetBrains Mono",monospace;font-size:clamp(9px,.95vw,10.5px);
+    letter-spacing:.14em;text-transform:uppercase;opacity:.92;
+    display:inline-flex;align-items:center;gap:4px;}
+  .fab-en i{font-style:normal;}
+  /* 切面高光，讓折角更立體 */
+  .fab::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(152deg,rgba(255,255,255,.28),transparent 46%);}
+  .fab::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;opacity:0;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);
     transform:skewX(-18deg);pointer-events:none;}
-  .sc-btn:hover::after{opacity:1;animation:regShine .8s ease;}
-  /* 手機：資訊收成一行、按鈕撐開，避免擠壓 */
+  .fab:hover::after{opacity:1;animation:regShine .9s ease;}
+  /* 手機縮小成角落標籤，減少蓋住倒數秒數的面積 */
   @media(max-width:620px){
-    .sticky-cta{padding:10px 16px calc(10px + env(safe-area-inset-bottom));}
-    .sc-inner{gap:12px;}
-    .sc-when{display:none;}
-    .sc-dl{font-size:10px;letter-spacing:.08em;}
-    .sc-btn{flex:1 1 auto;padding:14px 16px;font-size:11.5px;letter-spacing:.08em;}
-  }
-  @media(max-width:380px){
-    .sc-info{display:none;}                                       /* 極窄：只留按鈕 */
-    .sc-btn{width:100%;}
+    .fab{width:104px;height:74px;padding:0 12px calc(11px + env(safe-area-inset-bottom)) 0;gap:2px;
+      clip-path:polygon(40% 0%,100% 0%,100% 100%,0% 100%,9% 54%,24% 18%);}
+    .fab-zh{font-size:13px;letter-spacing:.03em;}
+    .fab-en{font-size:8px;letter-spacing:.08em;}
   }
 
   /* ---------- 活動倒數 ---------- */
@@ -269,7 +272,9 @@
   .cd-eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.28em;
     text-transform:uppercase;color:var(--cyan);display:inline-flex;align-items:center;gap:10px;}
   .cd-eyebrow .dia{width:7px;height:7px;border:1px solid var(--cyan);transform:rotate(45deg);flex:none;}
-  .cd-when{font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.05em;color:var(--muted);}
+  .cd-when{font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.05em;color:var(--muted);
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end;}
+  .cd-when b{font-weight:500;color:var(--blue);border:1px solid var(--line-2);padding:3px 9px;}
   .cd-grid{display:grid;grid-template-columns:repeat(4,1fr);}
   .cd-cell{position:relative;padding:2px 22px 2px 0;border-right:1px solid var(--line);}
   .cd-cell:last-child{border-right:none;}
@@ -611,17 +616,13 @@
 </header>
 <div class="menu-scrim" id="menuScrim" aria-hidden="true"></div>
 
-<!-- 固定在螢幕底部的報名列 -->
-<div class="sticky-cta" id="stickyCta">
-  <div class="sc-inner">
-    <div class="sc-info">
-      <span class="sc-dl"><i class="dia"></i>報名截止 Aug 14, 2026</span>
-      <span class="sc-when">2026.09.16 WED 09:30 (GMT+8) ・ 創意劇場</span>
-    </div>
-    <a class="sc-btn" href="https://tdri.surveycake.biz/s/wepMM" target="_blank" rel="noopener">
-      立即報名 Register<span aria-hidden="true">↗</span>
-    </a>
-  </div>
+<!-- 右下角浮動報名鈕（不規則多邊形，呼應 KV 的幾何語言）-->
+<div class="fab-wrap" id="fabWrap">
+  <a class="fab" href="https://tdri.surveycake.biz/s/wepMM" target="_blank" rel="noopener"
+     aria-label="立即報名 Register（另開新視窗）">
+    <span class="fab-zh">立即報名</span>
+    <span class="fab-en">Register<i aria-hidden="true">↗</i></span>
+  </a>
 </div>
 
 <!-- App 內建瀏覽器提示：自動跳轉失敗時的手動退路 -->
@@ -668,7 +669,7 @@
          data-end="2026-09-17T16:40:00+08:00">
       <div class="cd-head">
         <span class="cd-eyebrow"><i class="dia"></i><span id="cdTitle">Countdown to Opening</span></span>
-        <span class="cd-when">2026.09.16 WED 09:30 (GMT+8) ・ TDRI 創意劇場</span>
+        <span class="cd-when">2026.09.16 WED 09:30 (GMT+8) ・ TDRI 創意劇場<b>報名截止 Aug 14, 2026</b></span>
       </div>
       <div class="cd-grid" id="cdGrid">
         <div class="cd-cell"><div class="cd-num" id="cdD">--</div><div class="cd-lab">Days</div></div>
@@ -1232,17 +1233,16 @@
   else if(navMQ.addListener) navMQ.addListener(syncNavMode);      // 舊 Safari
   window.addEventListener('resize',syncNavMode,{passive:true});
 
-  // 固定底部報名列：量測實際高度，讓頁尾不被蓋住
-  var stickyCta=document.getElementById('stickyCta');
-  function fitSticky(){
-    if(!stickyCta) return;
-    var h=stickyCta.offsetHeight||0;
-    htmlEl.style.setProperty('--sticky-h',h+'px');
-    document.body.style.paddingBottom=h+'px';
+  // 浮動報名鈕：量測實際高度，讓捲到底時頁尾內容不被它蓋住
+  var fabWrap=document.getElementById('fabWrap');
+  function fitFab(){
+    if(!fabWrap) return;
+    var r=fabWrap.getBoundingClientRect();
+    document.body.style.paddingBottom=Math.round(r.height+28)+'px';
   }
-  fitSticky();
-  window.addEventListener('resize',fitSticky,{passive:true});
-  window.addEventListener('load',fitSticky);
+  fitFab();
+  window.addEventListener('resize',fitFab,{passive:true});
+  window.addEventListener('load',fitFab);
 
   function setMenu(open){
     navlinks.classList.toggle('open',open);
