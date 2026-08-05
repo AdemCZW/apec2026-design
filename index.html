@@ -202,7 +202,6 @@
 
   /* ---------- HERO ---------- */
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
-  /* padding-bottom 需留給絕對定位的 .scrollcue，否則會被倒數壓到 */
   .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-top:104px;padding-bottom:112px;position:relative;}
   .hero .full-name{max-width:560px;color:var(--muted);font-size:13px;line-height:1.7;margin-top:18px;font-family:"JetBrains Mono",monospace;letter-spacing:.02em;}
 
@@ -220,22 +219,7 @@
   .meta .v small{display:block;font-family:"Noto Sans TC",sans-serif;font-size:12.5px;color:var(--muted);font-weight:400;margin-top:3px;letter-spacing:.02em;}
   @keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
 
-  /* ---------- 報名 CTA ---------- */
-  .reg{margin-top:34px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;
-    opacity:0;animation:fadeUp .8s ease .8s forwards;}
-  .reg-btn{display:inline-flex;align-items:center;gap:12px;text-decoration:none;
-    background:var(--blue);color:#fff;border:1px solid var(--blue);border-radius:2px;
-    font-family:"JetBrains Mono",monospace;font-size:13px;letter-spacing:.12em;
-    text-transform:uppercase;padding:16px 26px;position:relative;overflow:hidden;
-    transition:background .25s,color .25s,transform .25s;}
-  .reg-btn:hover{background:#0A3CE0;transform:translateY(-1px);}
-  .reg-btn:active{transform:none;}
-  .reg-btn::after{content:"";position:absolute;top:0;left:-60%;width:38%;height:100%;opacity:0;
-    background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);
-    transform:skewX(-18deg);pointer-events:none;}
-  .reg-btn:hover::after{opacity:1;animation:regShine .8s ease;}
-  @keyframes regShine{from{left:-60%;}to{left:120%;}}
-  .reg-note{font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.04em;color:var(--muted);}
+  @keyframes regShine{from{left:-60%;}to{left:120%;}}             /* 底部報名列按鈕的掃光 */
 
   /* ---------- 固定底部報名列 ----------
      z-index 42：在內容之上，但低於選單遮罩(44)/抽屜(45)/App 提示條(60)。
@@ -306,11 +290,6 @@
   .cd-state small{display:block;font-family:"JetBrains Mono",monospace;font-size:11.5px;
     font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:12px;}
 
-  .scrollcue{position:absolute;bottom:calc(26px + var(--sticky-h,0px));left:var(--pad);display:flex;align-items:center;gap:12px;opacity:0;animation:fadeUp 1s ease 1s forwards;}
-  .scrollcue .bar{width:1px;height:42px;background:linear-gradient(var(--cyan),transparent);position:relative;overflow:hidden;}
-  .scrollcue .bar::after{content:"";position:absolute;top:-50%;left:0;width:100%;height:50%;background:var(--cyan);animation:drop 2.2s ease-in-out infinite;}
-  @keyframes drop{0%{top:-50%;}60%,100%{top:100%;}}
-  .scrollcue span{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.24em;color:var(--muted);text-transform:uppercase;}
 
   /* ---------- SECTION SHELL ---------- */
   /* 用長寫 padding-top/bottom，別用 padding 簡寫——簡寫的 " 0" 會把左右歸零、
@@ -495,9 +474,11 @@
     .arow{grid-template-columns:1fr;gap:10px;}
     .arow .time{padding-left:18px;}
     .hero .meta-row{flex-direction:column;}
-    .cd-grid{grid-template-columns:repeat(2,1fr);gap:24px 0;}      /* 倒數 2×2 */
-    .cd-cell:nth-child(2n){border-right:none;}
-    .cd-cell{padding-right:16px;}
+    /* 倒數維持四欄橫向（不折成 2×2）：縮小字級與間距讓 375px 也放得下 */
+    .cd-cell{padding-right:8px;}
+    .cd-num{font-size:clamp(1.5rem,9.2vw,2.6rem);letter-spacing:-.045em;}
+    .cd-lab{font-size:8px;letter-spacing:.1em;margin-top:8px;}
+    .cd-cell:last-child .cd-lab::after{width:4px;height:4px;margin-left:5px;}
     .cd-when{font-size:10.5px;}
     .hero .meta{border-right:none;border-bottom:1px solid var(--line);padding:18px 0;}
     .hero .meta:last-child{border-bottom:none;}
@@ -697,15 +678,7 @@
       </div>
       <div class="cd-state" id="cdState" hidden></div>
     </div>
-
-    <div class="reg">
-      <a class="reg-btn" href="https://tdri.surveycake.biz/s/wepMM" target="_blank" rel="noopener">
-        立即報名 Register<span aria-hidden="true">↗</span>
-      </a>
-      <span class="reg-note">報名截止 Aug 14, 2026 ・ 需事先完成線上報名</span>
-    </div>
   </div>
-  <div class="scrollcue"><div class="bar"></div><span>Scroll to explore</span></div>
 </section>
 
 <!-- CONCEPT -->
@@ -1259,7 +1232,7 @@
   else if(navMQ.addListener) navMQ.addListener(syncNavMode);      // 舊 Safari
   window.addEventListener('resize',syncNavMode,{passive:true});
 
-  // 固定底部報名列：量測實際高度，讓頁尾不被蓋住、scrollcue 也往上讓位
+  // 固定底部報名列：量測實際高度，讓頁尾不被蓋住
   var stickyCta=document.getElementById('stickyCta');
   function fitSticky(){
     if(!stickyCta) return;
