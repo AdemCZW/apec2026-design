@@ -474,8 +474,12 @@
   /* 純版面的響應式（不影響選單開關，維持 @media 依實際寬度即可）*/
   @media(max-width:760px){
     .concept-grid{grid-template-columns:1fr;}
-    .stat-row{grid-template-columns:1fr;border-top:none;margin-top:30px;}
-    .stat{border-top:1px solid var(--line);padding:18px 0;}
+    /* 維持三欄橫向（不折成單欄）：縮小字級與留白讓 375px 也放得下 */
+    .stat-row{margin-top:30px;}
+    .stat{padding:18px 10px 0 0;}
+    .stat:last-child{padding-right:0;}
+    .stat .big{font-size:clamp(1.6rem,7.5vw,2.2rem);}
+    .stat .lab{font-size:9.5px;letter-spacing:.08em;}
     .arow{grid-template-columns:1fr;gap:10px;}
     .arow .time{padding-left:18px;}
     .hero .meta-row{flex-direction:column;}
