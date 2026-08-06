@@ -29,13 +29,18 @@
   *{box-sizing:border-box;margin:0;padding:0;}
   /* scrollbar-gutter:stable 永遠保留捲軸空間，讓選單鎖捲動(overflow:hidden)時
      寬度不變——否則桌機經典捲軸消失會使寬度跨過 760 斷點、抽屜塌成橫向 nav */
-  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scrollbar-gutter:stable;}
+  /* overflow-x 必須同時寫在 html：只寫 body 時，該值會被提升到 viewport 而 body 自身
+     變回 visible，行動瀏覽器（尤其 iOS Safari）便無法可靠裁掉停在畫面外的 fixed 元素
+     （例如關閉狀態的側邊抽屜），造成頁面右側出現空白、可左右滑動。
+     overscroll-behavior-x:none 另外擋掉水平橡皮筋滑動。 */
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scrollbar-gutter:stable;
+    overflow-x:hidden;overscroll-behavior-x:none;max-width:100%;}
   body{
     font-family:"Inter","Noto Sans TC",sans-serif;
     background:var(--ink);
     color:var(--fg);
     line-height:1.6;
-    overflow-x:hidden;
+    overflow-x:hidden;overscroll-behavior-x:none;max-width:100%;
     -webkit-font-smoothing:antialiased;
     touch-action:manipulation;   /* 停用雙擊縮放（避免點擊突然放大局部），保留雙指縮放 */
   }
@@ -44,8 +49,9 @@
   ::selection{background:#F2F000;color:#06122E;}
 
   /* ---------- BACKGROUND CANVAS ---------- */
+  /* 用 100% 而非 100vw：100vw 含捲軸寬度，有捲軸時會比可視寬度多出約 15px 造成水平溢出 */
   #bg{
-    position:fixed;inset:0;width:100vw;height:100vh;
+    position:fixed;inset:0;width:100%;height:100%;
     z-index:0;display:block;
   }
   .vignette{
