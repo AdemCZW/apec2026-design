@@ -376,8 +376,12 @@
   .arow.brk .sess{color:var(--muted);font-weight:400;font-style:italic;}
 
   /* ---------- SPEAKERS ---------- */
-  .spk-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  /* 格線改由卡片自身的 border 畫（而非靠 gap 露出容器底色）：
+     最後一列排不滿時，空格才不會變成一塊突兀的色塊。 */
+  .spk-grid{display:grid;grid-template-columns:repeat(4,1fr);
+    border-top:1px solid var(--line);border-left:1px solid var(--line);}
   .spk{background:var(--ink);margin:0;padding:0 0 22px;display:flex;flex-direction:column;
+    border-right:1px solid var(--line);border-bottom:1px solid var(--line);
     position:relative;overflow:hidden;transition:background .4s;}
   .spk:hover{background:var(--ink-2);}
   /* height:auto 必要——否則 HTML 的 height 屬性會壓過 aspect-ratio，各卡圖高不一 */
