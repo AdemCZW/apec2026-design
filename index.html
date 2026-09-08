@@ -339,6 +339,11 @@
   .arow:hover .time{font-weight:600;}
   .arow .desc{color:var(--muted);font-size:13.5px;margin-top:6px;line-height:1.6;}
   .arow.brk .sess{color:var(--muted);font-weight:400;font-style:italic;}
+  /* 場次標籤（Session A / Keynote）與講者列 */
+  .arow .stag{display:inline-block;font-family:"JetBrains Mono",monospace;font-size:10.5px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:7px;}
+  .arow .by{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--blue);
+    margin-top:7px;letter-spacing:.02em;line-height:1.5;}
 
   /* ---------- SPEAKERS ---------- */
   /* 格線改由卡片自身的 border 畫（而非靠 gap 露出容器底色）：
@@ -714,14 +719,36 @@
 
     <div class="agenda show" id="d1">
       <div class="day-loc"><i class="dia"></i>Location — Creative Theater, TDRI</div>
-      <div class="arow"><div class="time">09:30—09:40</div><div><div class="sess">Opening Remarks &amp; Group Photo</div><div class="desc">Remarks by DoIT (MOEA) and TDRI representatives</div></div></div>
-      <div class="arow"><div class="time">09:40—09:50</div><div><div class="sess">VIP Group Photo</div></div></div>
-      <div class="arow"><div class="time">10:00—10:20</div><div><div class="sess">Keynote Speech</div><div class="desc">Representative from DoIT</div></div></div>
-      <div class="arow"><div class="time">10:20—11:10</div><div><div class="sess">Development Trends in AI-Driven Design Innovation</div><div class="desc">Latest breakthroughs and future prospects of AI in design</div></div></div>
-      <div class="arow"><div class="time">11:15—12:00</div><div><div class="sess">Applications of AI in Design Solutions</div><div class="desc">Opportunities and challenges for MSMEs</div></div></div>
+      <div class="arow brk"><div class="time">09:00—09:30</div><div><div class="sess">Registration</div></div></div>
+      <div class="arow"><div class="time">09:30—09:45</div><div><div class="sess">Opening Remarks</div></div></div>
+      <div class="arow"><div class="time">09:45—09:50</div><div><div class="sess">VIP Photo Session &amp; Group Photo</div></div></div>
+      <div class="arow"><div class="time">09:50—10:10</div><div><span class="stag">Keynote</span>
+        <div class="sess">Rethinking AI Policy for MSMEs: From Tech Subsidies to Capability Building</div>
+        <div class="by">Sigit Setiawan ・ Indonesia APEC Economy</div></div></div>
+      <div class="arow"><div class="time">10:10—10:30</div><div><span class="stag">Keynote</span>
+        <div class="sess">Beyond Efficiency: How AI-Driven Design Can Unlock New Growth Opportunities for MSMEs</div>
+        <div class="by">Stefano Marinelli ・ Peru APEC Economy</div></div></div>
+      <div class="arow brk"><div class="time">10:30—10:40</div><div><div class="sess">Break</div></div></div>
+      <div class="arow"><div class="time">10:40—11:10</div><div><span class="stag">Session A ・ Keynote</span>
+        <div class="sess">Developing Trends of AI-driven Design Innovation</div>
+        <div class="desc">Design in the age of generative economy</div>
+        <div class="by">Anne Asensio</div></div></div>
+      <div class="arow"><div class="time">11:10—11:40</div><div><span class="stag">Session A ・ Keynote</span>
+        <div class="sess">Developing Trends of AI-driven Design Innovation</div>
+        <div class="desc">The Naturalist's Eye — Observation as a Designer's Core Skill in the Age of AI</div>
+        <div class="by">Eisuke Tachikawa</div></div></div>
+      <div class="arow"><div class="time">11:40—12:00</div><div><span class="stag">Session B ・ Keynote</span>
+        <div class="sess">Applications of AI-driven Design Solutions</div>
+        <div class="desc">Why Design Matters in the AI Era — Taiwan's Approach to AI-Enabled Innovation and Industry Value</div>
+        <div class="by">Dr. Alice Chang</div></div></div>
       <div class="arow brk"><div class="time">12:00—13:20</div><div><div class="sess">Lunch</div></div></div>
-      <div class="arow"><div class="time">13:30—15:00</div><div><div class="sess">Design &amp; Technology for Enterprise Transformation</div><div class="desc">Cross-sector discussion on AI adoption</div></div></div>
-      <div class="arow"><div class="time">15:10—16:40</div><div><div class="sess">Future of Design &amp; AI: Talent, Policy &amp; Regional Cooperation</div><div class="desc">Regional collaboration and policy directions</div></div></div>
+      <div class="arow"><div class="time">13:30—15:00</div><div><span class="stag">Session C ・ Panel Discussion</span>
+        <div class="sess">Design &amp; Technology Practical Experience for Enterprise Transformation</div>
+        <div class="desc">Experts share AI implementation from industry, academia, and technical perspectives.</div></div></div>
+      <div class="arow"><div class="time">15:10—16:40</div><div><span class="stag">Session D ・ Panel Discussion</span>
+        <div class="sess">The Complementary Future of Design and AI Talent, Policy, and Regional Cooperation</div>
+        <div class="desc">Vision for regional cooperation and policy directions for AI and design.</div></div></div>
+      <div class="arow"><div class="time">16:40—17:30</div><div><div class="sess">Networking Session</div></div></div>
     </div>
 
     <div class="agenda" id="d2">
