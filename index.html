@@ -346,12 +346,13 @@
     margin-top:7px;letter-spacing:.02em;line-height:1.5;}
 
   /* ---------- SPEAKERS ---------- */
-  /* 格線改由卡片自身的 border 畫（而非靠 gap 露出容器底色）：
-     最後一列排不滿時，空格才不會變成一塊突兀的色塊。 */
-  .spk-grid{display:grid;grid-template-columns:repeat(4,1fr);
-    border-top:1px solid var(--line);border-left:1px solid var(--line);}
-  .spk{background:var(--ink);margin:0;padding:0 0 22px;display:flex;flex-direction:column;
-    border-right:1px solid var(--line);border-bottom:1px solid var(--line);
+  /* 用 flex-wrap 而非 grid：排不滿的最後一列可以置中，不會單獨一張靠左。
+     格線由每張卡的 box-shadow 畫（內側上/左＋外側右/下），相鄰卡的線剛好疊在同一像素，
+     所以置中後落單的卡片四邊也都完整，不必依賴容器的邊框。 */
+  .spk-grid{display:flex;flex-wrap:wrap;justify-content:center;--spk-cols:5;}
+  .spk{flex:0 0 calc(100% / var(--spk-cols));min-width:0;
+    background:var(--ink);margin:0;padding:0 0 22px;display:flex;flex-direction:column;
+    box-shadow:inset 1px 0 0 var(--line),inset 0 1px 0 var(--line),1px 0 0 var(--line),0 1px 0 var(--line),1px 1px 0 var(--line);
     position:relative;overflow:hidden;transition:background .4s;}
   .spk:hover{background:var(--ink-2);}
   /* height:auto 必要——否則 HTML 的 height 屬性會壓過 aspect-ratio，各卡圖高不一 */
@@ -408,9 +409,9 @@
     .rail{display:none;}
     .about-grid{grid-template-columns:1fr;}
     .venue-grid{grid-template-columns:1fr;}
-    .spk-grid{grid-template-columns:repeat(3,1fr);}
+    .spk-grid{--spk-cols:3;}
   }
-  @media(max-width:620px){ .spk-grid{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:620px){ .spk-grid{--spk-cols:2;} }
   /* ---- 手機導覽（漢堡＋側邊抽屜）----
      用 html.navmobile 這個「類別」控制，而不是純 @media 寬度。JS 依 (max-width:760px)
      設定這個類別，並在「選單打開時凍結」——這樣打開後不管視窗寬度怎麼跳動
